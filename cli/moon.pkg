@@ -1,0 +1,8 @@
+import {
+  "moonbitlang/core/math",
+  "zc222er/thinfilm_tmm/core",
+  "zc222er/thinfilm_tmm/materials" @mat,
+  "zc222er/thinfilm_tmm/tmm2d" @tmm,
+  "zc222er/thinfilm_tmm/devices" @dev,
+  "zc222er/thinfilm_tmm/analysis" @ana,
+}

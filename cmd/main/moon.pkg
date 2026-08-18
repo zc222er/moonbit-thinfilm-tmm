@@ -1,0 +1,5 @@
+import {
+  "zc222er/thinfilm_tmm/cli",
+}
+
+pkgtype(kind: "executable")
