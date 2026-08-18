@@ -63,6 +63,7 @@ pub struct Matrix {
 } derive(Eq)
 pub fn Matrix::add(Self, Self) -> Self
 pub fn Matrix::clone(Self) -> Self
+pub fn Matrix::dominant_eigenvalue(Self, Int, Double) -> (Double, Array[Double])
 pub fn Matrix::from_array2d(Array[Array[Double]]) -> Self
 pub fn Matrix::get(Self, Int, Int) -> Double
 pub fn Matrix::identity(Int) -> Self
@@ -70,6 +71,7 @@ pub fn Matrix::inv(Self) -> Self
 pub fn Matrix::lu_decompose(Self) -> LUDecomposition
 pub fn Matrix::mul(Self, Self) -> Self
 pub fn Matrix::mul_vec(Self, Array[Double]) -> Array[Double]
+pub fn Matrix::qr_decompose(Self) -> QRDecomposition
 pub fn Matrix::scale(Self, Double) -> Self
 pub fn Matrix::set(Self, Int, Int, Double) -> Unit
 pub fn Matrix::sub(Self, Self) -> Self
@@ -91,6 +93,11 @@ pub fn MatrixC::mul(Self, Self) -> Self
 pub fn MatrixC::mul_vec(Self, Array[@core.Complex]) -> Array[@core.Complex]
 pub fn MatrixC::set(Self, Int, Int, @core.Complex) -> Unit
 pub fn MatrixC::zeros(Int, Int) -> Self
+
+pub struct QRDecomposition {
+  q : Matrix
+  r : Matrix
+}
 
 pub struct Rng {
   mut state : UInt64

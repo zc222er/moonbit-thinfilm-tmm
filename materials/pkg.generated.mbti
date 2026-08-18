@@ -3,60 +3,355 @@ package "zc222er/thinfilm_tmm/materials"
 
 import {
   "zc222er/thinfilm_tmm/core",
+  "zc222er/thinfilm_tmm/dispersion",
 }
 
 // Values
+pub fn ag_ga_se2_silver_gallium_selenide() -> OpticalMaterial
+
 pub fn air() -> OpticalMaterial
 
+pub fn alon_aluminum_oxynitride() -> OpticalMaterial
+
+pub fn alq3_green_emitter() -> @dispersion.TabulatedDispersion
+
 pub fn aluminum() -> OpticalMaterial
+
+pub fn aluminum_nitride() -> OpticalMaterial
 
 pub fn aluminum_oxide() -> OpticalMaterial
 
 pub fn amorphous_silicon() -> OpticalMaterial
 
+pub fn amtir1_chalcogenide_glass() -> OpticalMaterial
+
+pub fn as2s3_chalcogenide_glass() -> OpticalMaterial
+
+pub fn as40se60_chalcogenide_glass() -> OpticalMaterial
+
+pub fn azo_enz_1450nm() -> ENZMaterial
+
+pub fn barium_fluoride_baf2() -> OpticalMaterial
+
+pub fn barium_titanate() -> OpticalMaterial
+
+pub fn bbo_nonlinear_crystal_extraordinary() -> OpticalMaterial
+
+pub fn bbo_nonlinear_crystal_ordinary() -> OpticalMaterial
+
+pub fn bgo_bismuth_germanate() -> OpticalMaterial
+
+pub fn bibo_bismuth_triborate() -> OpticalMaterial
+
+pub fn bismuth_telluride_bi2te3() -> OpticalMaterial
+
+pub fn bismuth_yig_biyig() -> OpticalMaterial
+
 pub fn bk7() -> OpticalMaterial
+
+pub fn c60_fullerene() -> @dispersion.TabulatedDispersion
+
+pub fn cadmium_telluride() -> OpticalMaterial
+
+pub fn caf2_thermo_optic() -> ThermoOpticProperties
+
+pub fn calcium_fluoride_caf2() -> OpticalMaterial
+
+pub fn cargille_index_matching_oil_152() -> OpticalMaterial
+
+pub fn cdo_enz_2100nm() -> ENZMaterial
+
+pub fn chlorobenzene_solvent() -> OpticalMaterial
+
+pub fn chromium() -> OpticalMaterial
+
+pub fn clbo_cesium_lithium_borate() -> OpticalMaterial
 
 pub fn copper() -> OpticalMaterial
 
 pub fn crystalline_silicon() -> OpticalMaterial
 
+pub fn cytop_amorphous_fluoropolymer() -> OpticalMaterial
+
+pub fn cytop_fluoropolymer() -> OpticalMaterial
+
 pub fn diamond() -> OpticalMaterial
+
+pub fn double_perovskite_cs2agbibbr6() -> OpticalMaterial
+
+pub fn e7_liquid_crystal() -> LiquidCrystalBirefringence
+
+pub fn er_yag_mid_ir_laser_gain() -> LaserGainProperties
+
+pub fn ethanol_solvent() -> OpticalMaterial
+
+pub fn five_cb_liquid_crystal() -> LiquidCrystalBirefringence
 
 pub fn fused_silica() -> OpticalMaterial
 
+pub fn fused_silica_thermo_optic() -> ThermoOpticProperties
+
 pub fn gallium_arsenide() -> OpticalMaterial
+
+pub fn gallium_nitride() -> OpticalMaterial
+
+pub fn gallium_oxide() -> OpticalMaterial
+
+pub fn gallium_phosphide_gap() -> OpticalMaterial
+
+pub fn germanium() -> OpticalMaterial
+
+pub fn germanium_thermo_optic() -> ThermoOpticProperties
+
+pub fn get_aluminum_rakic() -> @dispersion.TabulatedDispersion
+
+pub fn get_black_phosphorus_armchair() -> @dispersion.TabulatedDispersion
+
+pub fn get_cds_tabulated_spectrum() -> @dispersion.TabulatedDispersion
+
+pub fn get_cdse_tabulated_spectrum() -> @dispersion.TabulatedDispersion
+
+pub fn get_cigs_tabulated_spectrum() -> @dispersion.TabulatedDispersion
+
+pub fn get_copper_johnson_christy() -> @dispersion.TabulatedDispersion
+
+pub fn get_czts_tabulated_spectrum() -> @dispersion.TabulatedDispersion
+
+pub fn get_fto_spectrum() -> @dispersion.TabulatedDispersion
+
+pub fn get_gaas_tabulated_spectrum() -> @dispersion.TabulatedDispersion
+
+pub fn get_gold_johnson_christy() -> @dispersion.TabulatedDispersion
+
+pub fn get_hexagonal_boron_nitride_hbn() -> OpticalMaterial
+
+pub fn get_igzo_spectrum() -> @dispersion.TabulatedDispersion
+
+pub fn get_in_ga_as_spectrum() -> @dispersion.TabulatedDispersion
+
+pub fn get_izo_spectrum() -> @dispersion.TabulatedDispersion
+
+pub fn get_molybdenum_spectrum() -> @dispersion.TabulatedDispersion
+
+pub fn get_mose2_monolayer_spectrum() -> @dispersion.TabulatedDispersion
+
+pub fn get_palladium_spectrum() -> @dispersion.TabulatedDispersion
+
+pub fn get_pedot_pss_clevios_ph1000() -> @dispersion.TabulatedDispersion
+
+pub fn get_silver_johnson_christy() -> @dispersion.TabulatedDispersion
+
+pub fn get_single_walled_cnt_film() -> @dispersion.TabulatedDispersion
+
+pub fn get_wse2_monolayer_spectrum() -> @dispersion.TabulatedDispersion
+
+pub fn get_zno_doped_azo_spectrum() -> @dispersion.TabulatedDispersion
+
+pub fn glycerol_liquid() -> OpticalMaterial
 
 pub fn gold() -> OpticalMaterial
 
 pub fn graphene_monolayer() -> OpticalMaterial
 
+pub fn gst225_amorphous_phase() -> @dispersion.TabulatedDispersion
+
+pub fn gst225_crystalline_phase() -> @dispersion.TabulatedDispersion
+
+pub fn hafnium_dioxide_hfo2_precise() -> OpticalMaterial
+
 pub fn hafnium_oxide() -> OpticalMaterial
+
+pub fn heavy_water_d2o() -> OpticalMaterial
+
+pub fn ig2_ge20sb15se65_glass() -> OpticalMaterial
+
+pub fn ig3_ge22as20se58_glass() -> OpticalMaterial
+
+pub fn indium_antimonide_insb() -> OpticalMaterial
+
+pub fn indium_phosphide() -> OpticalMaterial
 
 pub fn indium_tin_oxide() -> OpticalMaterial
 
+pub fn isopropanol_ipa() -> OpticalMaterial
+
+pub fn ito_enz_1240nm() -> ENZMaterial
+
+pub fn krs5_thallium_bromoiodide() -> OpticalMaterial
+
+pub fn ktp_nonlinear_crystal_z() -> OpticalMaterial
+
+pub fn lanthanum_oxide_la2o3() -> OpticalMaterial
+
+pub fn lanthanum_zirconate_la2zr2o7() -> OpticalMaterial
+
+pub fn lbo_nonlinear_crystal_z() -> OpticalMaterial
+
+pub fn lead_sulfide_quantum_dots() -> OpticalMaterial
+
+pub fn lead_tungstate_pbwo4() -> OpticalMaterial
+
+pub fn lithium_niobate() -> OpticalMaterial
+
+pub fn lyso_lutetium_yttrium_oxyorthosilicate() -> OpticalMaterial
+
 pub fn magnesium_fluoride() -> OpticalMaterial
+
+pub fn mos2_monolayer() -> OpticalMaterial
+
+pub fn my133_optical_adhesive() -> OpticalMaterial
+
+pub fn nbn_superconductor_normal_state() -> OpticalMaterial
+
+pub fn nd_yag_laser_gain() -> LaserGainProperties
+
+pub fn nickel() -> OpticalMaterial
+
+pub fn norland_optical_adhesive_68() -> OpticalMaterial
+
+pub fn pbmso4_lead_molybdate_acousto_optic() -> AcoustoOpticProperties
+
+pub fn pdms_silicone() -> OpticalMaterial
 
 pub fn pedot_pss() -> OpticalMaterial
 
+pub fn perovskite_cspbbr3() -> OpticalMaterial
+
+pub fn perovskite_cspbi3() -> OpticalMaterial
+
+pub fn perovskite_fapbi3() -> OpticalMaterial
+
 pub fn perovskite_mapbi3() -> OpticalMaterial
+
+pub fn platinum() -> OpticalMaterial
+
+pub fn pm6_donor_polymer() -> @dispersion.TabulatedDispersion
 
 pub fn pmma() -> OpticalMaterial
 
+pub fn polycarbonate_polymer() -> OpticalMaterial
+
+pub fn polystyrene_polymer() -> OpticalMaterial
+
+pub fn rhodamine_6g_laser_dye() -> OpticalMaterial
+
+pub fn scandium_oxide_sc2o3() -> OpticalMaterial
+
+pub fn schott_f2_flint_glass() -> OpticalMaterial
+
+pub fn schott_lasfn9_high_index_glass() -> OpticalMaterial
+
+pub fn schott_sf11_dense_flint_glass() -> OpticalMaterial
+
+pub fn silicon_carbide_4h() -> OpticalMaterial
+
 pub fn silicon_nitride() -> OpticalMaterial
+
+pub fn silicon_thermo_optic() -> ThermoOpticProperties
 
 pub fn silver() -> OpticalMaterial
 
+pub fn sodium_iodide_nai() -> OpticalMaterial
+
+pub fn spinel_mgal2o4_ceramic() -> OpticalMaterial
+
+pub fn su8_photoresist() -> OpticalMaterial
+
 pub fn tantalum_pentoxide() -> OpticalMaterial
+
+pub fn teo2_paratellurite_acousto_optic() -> AcoustoOpticProperties
+
+pub fn terbium_gallium_garnet_tgg() -> OpticalMaterial
+
+pub fn tgg_verdet_constant(Double) -> Double
+
+pub fn ti_sapphire_laser_gain() -> LaserGainProperties
+
+pub fn tin_superconductor() -> OpticalMaterial
+
+pub fn tio2_thermo_optic() -> ThermoOpticProperties
+
+pub fn titanium() -> OpticalMaterial
 
 pub fn titanium_dioxide() -> OpticalMaterial
 
+pub fn toluene_solvent() -> OpticalMaterial
+
+pub fn topas_coc_polymer() -> OpticalMaterial
+
+pub fn tungsten() -> OpticalMaterial
+
 pub fn vacuum() -> OpticalMaterial
 
+pub fn vanadium_dioxide_insulating_phase() -> @dispersion.TabulatedDispersion
+
+pub fn vanadium_dioxide_metallic_phase() -> @dispersion.TabulatedDispersion
+
 pub fn water() -> OpticalMaterial
+
+pub fn ws2_monolayer() -> OpticalMaterial
+
+pub fn y6_non_fullerene_acceptor() -> @dispersion.TabulatedDispersion
+
+pub fn yag_crystal() -> OpticalMaterial
+
+pub fn yb_yag_laser_gain() -> LaserGainProperties
+
+pub fn ybco_high_tc_superconductor() -> OpticalMaterial
+
+pub fn ysz_8mol_yttria_stabilized_zirconia() -> OpticalMaterial
+
+pub fn yttrium_iron_garnet_yig() -> OpticalMaterial
+
+pub fn yttrium_oxide_y2o3() -> OpticalMaterial
+
+pub fn zeonex_cop_polymer() -> OpticalMaterial
+
+pub fn zgp_zinc_germanium_phosphide() -> OpticalMaterial
+
+pub fn zinc_oxide() -> OpticalMaterial
+
+pub fn zinc_selenide() -> OpticalMaterial
+
+pub fn zirconium_dioxide_zro2() -> OpticalMaterial
 
 // Errors
 
 // Types and methods
+pub struct AcoustoOpticProperties {
+  material_name : String
+  acoustic_velocity_m_s : Double
+  figure_of_merit_m2_10_15_s3_kg : Double
+  center_index : Double
+} derive(Eq)
+
+pub struct ENZMaterial {
+  name : String
+  enz_wavelength_nm : Double
+  eps_infinity : Double
+  damping_gamma_ev : Double
+}
+pub fn ENZMaterial::get_index(Self, Double) -> @core.Complex
+pub fn ENZMaterial::new(String, Double, Double, Double) -> Self
+
+pub(all) struct LaserGainProperties {
+  emission_cross_section_cm2 : Double
+  absorption_cross_section_pump_cm2 : Double
+  fluorescence_lifetime_us : Double
+  laser_wavelength_nm : Double
+  pump_wavelength_nm : Double
+} derive(Eq)
+
+pub struct LiquidCrystalBirefringence {
+  name : String
+  no_cauchy_a : Double
+  no_cauchy_b : Double
+  ne_cauchy_a : Double
+  ne_cauchy_b : Double
+} derive(Eq)
+pub fn LiquidCrystalBirefringence::get_ne(Self, Double) -> Double
+pub fn LiquidCrystalBirefringence::get_no(Self, Double) -> Double
+
 pub enum MaterialCategory {
   Dielectric
   Semiconductor
@@ -87,6 +382,20 @@ pub fn OpticalMaterial::get_index(Self, Double) -> @core.Complex
 pub fn OpticalMaterial::to_layer(Self, Double, Double) -> @core.Layer
 pub impl Eq for OpticalMaterial
 pub impl Show for OpticalMaterial
+
+pub struct PCFCladdingGeometry {
+  pitch_period_um : Double
+  hole_diameter_over_pitch : Double
+  core_material : OpticalMaterial
+}
+pub fn PCFCladdingGeometry::is_endlessly_single_mode(Self) -> Bool
+pub fn PCFCladdingGeometry::new(Double, Double, OpticalMaterial) -> Self
+
+pub struct ThermoOpticProperties {
+  dn_dt_per_kelvin : Double
+  thermal_expansion_alpha_per_k : Double
+  reference_temperature_c : Double
+} derive(Eq)
 
 // Type aliases
 

@@ -31,6 +31,18 @@ pub fn CauchyDispersion::transparent(Double, Double, Double) -> Self
 pub impl Show for CauchyDispersion
 pub impl OpticalDispersion for CauchyDispersion
 
+pub struct CodyLorentzDispersion {
+  eps_infinity : Double
+  amplitude_a : Double
+  resonance_e0 : Double
+  broadening_c : Double
+  optical_bandgap_eg : Double
+  urbach_energy_eu : Double
+  transition_energy_et : Double
+} derive(Eq)
+pub fn CodyLorentzDispersion::new(Double, Double, Double, Double, Double, Double, Double) -> Self
+pub impl OpticalDispersion for CodyLorentzDispersion
+
 pub struct ConstantDispersion {
   n : Double
   k : Double
