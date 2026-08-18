@@ -550,7 +550,7 @@ pub impl OpticalDispersion for TabulatedDispersion with fn get_complex_index(
 ) {
   let n = self.n_spline.eval(wavelength_nm)
   let k = self.k_spline.eval(wavelength_nm)
-  let safe_n = if n < 1.0 { 1.0 } else { n }
+  let safe_n = if n < 0.0 { 0.0 } else { n }
   let safe_k = if k < 0.0 { 0.0 } else { k }
   @core.Complex::new(safe_n, safe_k)
 }
