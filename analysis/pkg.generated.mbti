@@ -6,7 +6,29 @@ import {
 }
 
 // Values
+pub fn calculate_angular_wavefront_aberration(Array[Double], Double) -> WavefrontMetrics
+
+pub fn calculate_cct_mccamy(Double, Double) -> Double
+
+pub fn calculate_gamut_triangle_area(Double, Double, Double, Double, Double, Double) -> Double
+
+pub fn calculate_goos_hanchen_shift(Double, Double, Double, Double) -> GoosHanchenShiftResult
+
+pub fn calculate_ldos_at_depth(@core.Complex, @core.Complex, Double, Double, Double) -> LocalDensityOfStates
+
+pub fn calculate_photometric_quantities(@core.SpectralSimulationResult) -> PhotometricResult
+
+pub fn calculate_pseudo_dielectric_function(Double, Double, Double, Double) -> PseudoDielectricFunction
+
+pub fn calibrate_raw_mueller_matrix(MuellerMatrix, MuellerCalibrationParameters) -> MuellerMatrix
+
+pub fn convolve_spectrometer_slit(@core.SpectrumData, Double) -> @core.SpectrumData
+
+pub fn decompose_mueller_matrix(MuellerMatrix) -> LuChipmanDecompositionResult
+
 pub fn get_cie_table() -> Array[CIEColorMatchPoint]
+
+pub fn perform_spectral_pca(Array[Array[Double]], Int) -> SpectroscopicPCAResult
 
 pub fn spectrum_to_color(@core.SpectrumData) -> CIEXYZColor
 
@@ -33,6 +55,178 @@ pub struct CIEXYZColor {
   hex_code : String
 } derive(Eq)
 pub impl Show for CIEXYZColor
+
+pub struct DisplayGamutCoverage {
+  srgb_coverage_percent : Double
+  dci_p3_coverage_percent : Double
+  bt2020_coverage_percent : Double
+  correlated_color_temp_k : Double
+} derive(Eq)
+pub fn DisplayGamutCoverage::new(Double, Double, Double, Double) -> Self
+pub impl Show for DisplayGamutCoverage
+
+pub struct ForouhiBloomerDispersion {
+  n_infinity : Double
+  amplitude_a : Double
+  broadening_b : Double
+  position_c : Double
+  bandgap_eg : Double
+} derive(Eq)
+pub fn ForouhiBloomerDispersion::get_complex_index(Self, Double) -> @core.Complex
+pub fn ForouhiBloomerDispersion::new(Double, Double, Double, Double, Double) -> Self
+
+pub struct GoosHanchenShiftResult {
+  shift_te_nm : Double
+  shift_tm_nm : Double
+  ratio_tm_te : Double
+} derive(Eq)
+pub impl Show for GoosHanchenShiftResult
+
+pub struct GratingTrapezoidProfile {
+  bottom_cd_nm : Double
+  top_cd_nm : Double
+  trench_depth_nm : Double
+  pitch_period_nm : Double
+}
+pub fn GratingTrapezoidProfile::calculate_sidewall_angle_deg(Self) -> Double
+pub fn GratingTrapezoidProfile::new(Double, Double, Double, Double) -> Self
+pub fn GratingTrapezoidProfile::slice_trapezoid(Self, Int) -> Array[(Double, Double)]
+
+pub struct IncoherentSubstrateCorrection {
+  substrate_thickness_mm : Double
+  substrate_absorption_coeff_cm1 : Double
+  back_surface_roughness_factor : Double
+}
+pub fn IncoherentSubstrateCorrection::calculate_total_reflectance(Self, Double, Double, Double) -> Double
+pub fn IncoherentSubstrateCorrection::new(Double, Double, Double) -> Self
+
+pub struct JonesMatrix {
+  j00 : @core.Complex
+  j01 : @core.Complex
+  j10 : @core.Complex
+  j11 : @core.Complex
+} derive(Eq)
+pub fn JonesMatrix::apply(Self, JonesVector) -> JonesVector
+pub fn JonesMatrix::half_wave_plate_fast_axis_x() -> Self
+pub fn JonesMatrix::quarter_wave_plate_fast_axis_x() -> Self
+
+pub struct JonesVector {
+  ex : @core.Complex
+  ey : @core.Complex
+} derive(Eq)
+pub fn JonesVector::circular_right() -> Self
+pub fn JonesVector::linear_horizontal() -> Self
+pub fn JonesVector::linear_vertical() -> Self
+
+pub struct LocalDensityOfStates {
+  purcell_factor_perp : Double
+  purcell_factor_parallel : Double
+  orientation_averaged_purcell : Double
+  radiative_quantum_efficiency : Double
+} derive(Eq)
+pub impl Show for LocalDensityOfStates
+
+pub struct LuChipmanDecompositionResult {
+  diattenuation : Double
+  retardance_rad : Double
+  depolarization_index : Double
+  polarimetric_entropy : Double
+} derive(Eq)
+pub impl Show for LuChipmanDecompositionResult
+
+pub struct MuellerCalibrationParameters {
+  polarizer_azimuth_error_deg : Double
+  analyzer_azimuth_error_deg : Double
+  compensator_1_retardance_deg : Double
+  compensator_2_retardance_deg : Double
+} derive(Eq)
+pub fn MuellerCalibrationParameters::ideal() -> Self
+
+pub struct MuellerMatrix {
+  m : Array[Double]
+} derive(Eq)
+pub fn MuellerMatrix::identity() -> Self
+pub fn MuellerMatrix::transform(Self, StokesVector) -> StokesVector
+
+pub struct PhotometricResult {
+  luminous_transmittance : Double
+  luminous_reflectance : Double
+  solar_direct_transmittance : Double
+  solar_direct_reflectance : Double
+  color_rendering_index : Double
+  correlated_color_temperature_k : Double
+} derive(Eq)
+pub impl Show for PhotometricResult
+
+pub struct PseudoDielectricFunction {
+  wavelength_nm : Double
+  incident_angle_deg : Double
+  eps_1_real : Double
+  eps_2_imag : Double
+  pseudo_n : Double
+  pseudo_k : Double
+} derive(Eq)
+pub impl Show for PseudoDielectricFunction
+
+pub struct PulseBroadeningResult {
+  output_duration_fwhm_fs : Double
+  broadening_ratio : Double
+  accumulated_chirp_parameter : Double
+  peak_intensity_ratio : Double
+} derive(Eq)
+pub impl Show for PulseBroadeningResult
+
+pub struct SpectroscopicPCAResult {
+  principal_components : Array[Array[Double]]
+  explained_variance_ratio : Array[Double]
+  mean_spectrum : Array[Double]
+} derive(Eq)
+pub impl Show for SpectroscopicPCAResult
+
+pub struct StokesVector {
+  s0 : Double
+  s1 : Double
+  s2 : Double
+  s3 : Double
+} derive(Default, Eq)
+pub fn StokesVector::circular_right(Double) -> Self
+pub fn StokesVector::degree_of_circular_polarization(Self) -> Double
+pub fn StokesVector::degree_of_linear_polarization(Self) -> Double
+pub fn StokesVector::degree_of_polarization(Self) -> Double
+pub fn StokesVector::linear_horizontal(Double) -> Self
+pub fn StokesVector::linear_vertical(Double) -> Self
+pub fn StokesVector::unpolarized(Double) -> Self
+pub impl Show for StokesVector
+
+pub struct UltrafastPulseProfile {
+  initial_duration_fwhm_fs : Double
+  center_wavelength_nm : Double
+}
+pub fn UltrafastPulseProfile::calculate_broadening(Self, Double) -> PulseBroadeningResult
+pub fn UltrafastPulseProfile::new(Double, Double) -> Self
+
+pub struct WavefrontMetrics {
+  peak_to_valley_opd_nm : Double
+  rms_opd_nm : Double
+  strehl_ratio : Double
+  phase_variance_rad2 : Double
+} derive(Eq)
+pub impl Show for WavefrontMetrics
+
+pub(all) struct ZernikeAberrationCoefficients {
+  mut piston_c0 : Double
+  mut tilt_x_c1 : Double
+  mut tilt_y_c2 : Double
+  mut defocus_c3 : Double
+  mut astigmatism_0_c4 : Double
+  mut astigmatism_45_c5 : Double
+  mut coma_x_c6 : Double
+  mut coma_y_c7 : Double
+  mut spherical_c8 : Double
+} derive(Eq)
+pub fn ZernikeAberrationCoefficients::calculate_rms_error_nm(Self) -> Double
+pub fn ZernikeAberrationCoefficients::evaluate_opd(Self, Double, Double) -> Double
+pub fn ZernikeAberrationCoefficients::zeros() -> Self
 
 // Type aliases
 
