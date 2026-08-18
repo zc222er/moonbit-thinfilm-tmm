@@ -3,25 +3,165 @@ package "zc222er/thinfilm_tmm/inversion"
 
 import {
   "zc222er/thinfilm_tmm/core",
+  "zc222er/thinfilm_tmm/materials",
   "zc222er/thinfilm_tmm/math",
 }
 
 // Values
+pub fn ant_colony_optimize((Array[Double]) -> Double, Array[ParameterBound], ACORSettings) -> Array[Double]
+
+pub fn cma_es_optimize((Array[Double]) -> Double, Array[Double], Array[ParameterBound], CMAESSettings) -> Array[Double]
+
 pub fn compute_jacobian((Array[Double]) -> Array[Double], Array[Double], Double) -> @math.Matrix
 
 pub fn compute_mse(Array[Double]) -> Double
 
+pub fn cuckoo_search_optimize((Array[Double]) -> Double, Array[ParameterBound], CuckooSettings) -> Array[Double]
+
 pub fn differential_evolution((Array[Double]) -> Double, Array[ParameterBound], Int, Int, Double, Double) -> Array[Double]
+
+pub fn differential_evolution_optimize((Array[Double]) -> Double, Array[ParameterBound], DESettings) -> Array[Double]
 
 pub fn fit_cauchy_film(@core.Layer, @core.SpectrumData, Double, Double, Double) -> @core.InversionResult
 
+pub fn fit_multi_angle_ellipsometry(@core.Layer, MultiAngleEllipsometryData, Double, Double, Double) -> @core.InversionResult
+
 pub fn fit_single_layer_rn(@core.Layer, @core.SpectrumData, Double, Double) -> @core.InversionResult
 
+pub fn grey_wolf_optimize((Array[Double]) -> Double, Array[ParameterBound], GWOSettings) -> Array[Double]
+
+pub fn jaya_optimize((Array[Double]) -> Double, Array[ParameterBound], JayaSettings) -> Array[Double]
+
 pub fn levenberg_marquardt((Array[Double]) -> Array[Double], Array[Double], Array[ParameterBound], Int, Double) -> @core.InversionResult
+
+pub fn moth_flame_optimize((Array[Double]) -> Double, Array[ParameterBound], MFOSettings) -> Array[Double]
+
+pub fn particle_swarm_optimize((Array[Double]) -> Double, Array[ParameterBound], PSOSettings) -> Array[Double]
+
+pub fn run_mcmc_bayesian_inversion((Array[Double]) -> Array[Double], Array[Double], Array[ParameterBound], MCMCSettings) -> MCMCResult
+
+pub fn simulated_annealing_optimize((Array[Double]) -> Double, Array[Double], Array[ParameterBound], AnnealingSettings) -> Array[Double]
+
+pub fn sine_cosine_optimize((Array[Double]) -> Double, Array[ParameterBound], SCASettings) -> Array[Double]
+
+pub fn whale_optimize((Array[Double]) -> Double, Array[ParameterBound], WOASettings) -> Array[Double]
 
 // Errors
 
 // Types and methods
+pub struct ACORSettings {
+  num_ants : Int
+  archive_size : Int
+  max_iterations : Int
+  q_locality : Double
+  xi_convergence : Double
+}
+pub fn ACORSettings::default() -> Self
+
+pub struct AnnealingSettings {
+  initial_temperature : Double
+  final_temperature : Double
+  max_evaluations : Int
+  cooling_rate : Double
+}
+pub fn AnnealingSettings::default() -> Self
+
+pub struct CMAESSettings {
+  lambda_pop_size : Int
+  max_generations : Int
+  initial_sigma : Double
+}
+pub fn CMAESSettings::default() -> Self
+
+pub struct CuckooSettings {
+  num_nests : Int
+  max_generations : Int
+  discovery_rate_pa : Double
+  step_size_alpha : Double
+}
+pub fn CuckooSettings::default() -> Self
+
+pub struct DESettings {
+  population_size : Int
+  max_generations : Int
+  mutation_factor_f : Double
+  crossover_prob_cr : Double
+}
+pub fn DESettings::default() -> Self
+
+pub struct GWOSettings {
+  num_wolves : Int
+  max_iterations : Int
+}
+pub fn GWOSettings::default() -> Self
+
+pub struct JayaSettings {
+  population_size : Int
+  max_iterations : Int
+}
+pub fn JayaSettings::default() -> Self
+
+pub(all) struct MCMCResult {
+  mean_parameters : Array[Double]
+  median_parameters : Array[Double]
+  credible_interval_low : Array[Double]
+  credible_interval_high : Array[Double]
+  acceptance_rate : Double
+  sample_chain : Array[Array[Double]]
+} derive(Eq)
+pub impl Show for MCMCResult
+
+pub(all) struct MCMCSettings {
+  num_samples : Int
+  burn_in : Int
+  proposal_step_std : Double
+  likelihood_noise_sigma : Double
+} derive(Eq)
+pub fn MCMCSettings::default() -> Self
+
+pub struct MFOSettings {
+  num_moths : Int
+  max_iterations : Int
+  spiral_constant_b : Double
+}
+pub fn MFOSettings::default() -> Self
+
+pub struct MultiAngleEllipsometryData {
+  angles_deg : Array[Double]
+  grid : @core.SpectrumGrid
+  measured_psi : Array[Array[Double]]
+  measured_delta : Array[Array[Double]]
+}
+pub fn MultiAngleEllipsometryData::new(Array[Double], @core.SpectrumGrid, Array[Array[Double]], Array[Array[Double]]) -> Self
+
+pub struct NeedleSynthesisEngine {
+  target_spectrum : @core.SpectrumData
+  high_index_material : @materials.OpticalMaterial
+  low_index_material : @materials.OpticalMaterial
+  substrate : @core.Layer
+  max_layers : Int
+}
+pub fn NeedleSynthesisEngine::new(@core.SpectrumData, @materials.OpticalMaterial, @materials.OpticalMaterial, @core.Layer, Int) -> Self
+pub fn NeedleSynthesisEngine::synthesize(Self, Double) -> NeedleSynthesisResult
+
+pub struct NeedleSynthesisResult {
+  final_stack : @core.MultiLayerStack
+  total_thickness_nm : Double
+  layer_count : Int
+  merit_function_value : Double
+} derive(Eq)
+pub impl Show for NeedleSynthesisResult
+
+pub struct PSOSettings {
+  num_particles : Int
+  max_iterations : Int
+  inertia_weight_start : Double
+  inertia_weight_end : Double
+  c1_cognitive : Double
+  c2_social : Double
+}
+pub fn PSOSettings::default() -> Self
+
 pub struct ParameterBound {
   name : String
   min_val : Double
@@ -29,6 +169,20 @@ pub struct ParameterBound {
   initial_guess : Double
 } derive(Eq)
 pub fn ParameterBound::new(String, Double, Double, Double) -> Self
+
+pub struct SCASettings {
+  num_agents : Int
+  max_iterations : Int
+  a_constant : Double
+}
+pub fn SCASettings::default() -> Self
+
+pub struct WOASettings {
+  num_whales : Int
+  max_iterations : Int
+  spiral_constant_b : Double
+}
+pub fn WOASettings::default() -> Self
 
 // Type aliases
 
