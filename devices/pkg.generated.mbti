@@ -4,6 +4,7 @@ package "zc222er/thinfilm_tmm/devices"
 import {
   "zc222er/thinfilm_tmm/core",
   "zc222er/thinfilm_tmm/materials",
+  "zc222er/thinfilm_tmm/tmm2d",
 }
 
 // Values
@@ -13,15 +14,61 @@ pub fn calculate_solar_cell_jsc(@core.MultiLayerStack, Int, @core.SpectrumGrid) 
 
 pub fn create_broadband_4layer_ar(@core.Layer, Double) -> @core.MultiLayerStack
 
+pub fn create_dichroic_mirror_532_1064(@materials.OpticalMaterial) -> @core.MultiLayerStack
+
 pub fn create_double_layer_ar(@core.Layer, Double, @materials.OpticalMaterial, @materials.OpticalMaterial) -> @core.MultiLayerStack
 
 pub fn create_perovskite_solar_cell(Double, Double) -> @core.MultiLayerStack
 
 pub fn create_single_layer_ar(@core.Layer, Double, @materials.OpticalMaterial) -> @core.MultiLayerStack
 
+pub fn planck_blackbody_radiance(Double, Double) -> Double
+
 // Errors
 
 // Types and methods
+pub struct AcoustoOpticModulator {
+  crystal_properties : @materials.AcoustoOpticProperties
+  acoustic_transducer_length_mm : Double
+  acoustic_transducer_height_mm : Double
+  rf_frequency_mhz : Double
+}
+pub fn AcoustoOpticModulator::calculate_bragg_angle_deg(Self, Double) -> Double
+pub fn AcoustoOpticModulator::calculate_diffraction_efficiency(Self, Double, Double) -> Double
+pub fn AcoustoOpticModulator::new(@materials.AcoustoOpticProperties, Double, Double, Double) -> Self
+
+pub struct AthermalFilterDesign {
+  center_wavelength_nm : Double
+  temperature_shift_c : Double
+  high_index_mat : @materials.OpticalMaterial
+  low_index_mat : @materials.OpticalMaterial
+  substrate_cte_ppm_k : Double
+}
+pub fn AthermalFilterDesign::calculate_thermal_wavelength_drift_pm_k(Self, Double, Double) -> Double
+pub fn AthermalFilterDesign::new(Double, Double, @materials.OpticalMaterial, @materials.OpticalMaterial, Double) -> Self
+
+pub struct BlochBandPoint {
+  wavelength_nm : Double
+  frequency_thz : Double
+  normalized_frequency : Double
+  bloch_wavevector_k : Double
+  is_bandgap : Bool
+  group_velocity_normalized : Double
+} derive(Eq)
+pub impl Show for BlochBandPoint
+
+pub struct ChirpedMirrorDesign {
+  center_wavelength_nm : Double
+  target_gdd_fs2 : Double
+  num_layer_pairs : Int
+  high_mat : @materials.OpticalMaterial
+  low_mat : @materials.OpticalMaterial
+  substrate : @core.Layer
+}
+pub fn ChirpedMirrorDesign::build_stack(Self) -> @core.MultiLayerStack
+pub fn ChirpedMirrorDesign::new(Double, Double, Int, @materials.OpticalMaterial, @materials.OpticalMaterial, @core.Layer) -> Self
+pub fn ChirpedMirrorDesign::simulate_gdd_spectrum(Self, @core.SpectrumGrid) -> Array[@tmm2d.ChromaticDispersionResult]
+
 pub struct DBRDesign {
   center_wavelength_nm : Double
   pairs : Int
@@ -33,6 +80,42 @@ pub fn DBRDesign::analytical_peak_reflectance(Self) -> Double
 pub fn DBRDesign::analytical_stopband_width(Self) -> Double
 pub fn DBRDesign::build_stack(Self) -> @core.MultiLayerStack
 pub fn DBRDesign::new(Double, Int, @materials.OpticalMaterial, @materials.OpticalMaterial, @core.Layer) -> Self
+
+pub struct EUVMirrorDesign {
+  center_wavelength_nm : Double
+  num_periods : Int
+  period_nm : Double
+  gamma_ratio : Double
+  interfacial_roughness_nm : Double
+}
+pub fn EUVMirrorDesign::calculate_peak_reflectivity(Self, Double) -> Double
+pub fn EUVMirrorDesign::debye_waller_factor(Self, Double) -> Double
+pub fn EUVMirrorDesign::standard_moly_silicon() -> Self
+
+pub struct EllipsometerHarmonics {
+  alpha_2omega : Double
+  beta_2omega : Double
+  psi_reconstructed_deg : Double
+  delta_reconstructed_deg : Double
+} derive(Eq)
+pub impl Show for EllipsometerHarmonics
+
+pub struct EtalonMetrics {
+  finesse : Double
+  free_spectral_range_nm : Double
+  bandwidth_fwhm_nm : Double
+  peak_transmission : Double
+} derive(Eq)
+pub impl Show for EtalonMetrics
+
+pub struct FabryPerotEtalon {
+  cavity_length_um : Double
+  cavity_refractive_index : Double
+  mirror_reflectance : Double
+}
+pub fn FabryPerotEtalon::calculate_transmission(Self, Double) -> Double
+pub fn FabryPerotEtalon::evaluate_etalon(Self, Double) -> EtalonMetrics
+pub fn FabryPerotEtalon::new(Double, Double, Double) -> Self
 
 pub struct FabryPerotFilter {
   center_wavelength_nm : Double
@@ -46,6 +129,186 @@ pub struct FabryPerotFilter {
 pub fn FabryPerotFilter::build_stack(Self) -> @core.MultiLayerStack
 pub fn FabryPerotFilter::new(Double, Int, Int, @materials.OpticalMaterial, @materials.OpticalMaterial, @materials.OpticalMaterial, @core.Layer) -> Self
 
+pub struct FaradayIsolator {
+  operating_wavelength_nm : Double
+  crystal_length_mm : Double
+  applied_magnetic_field_tesla : Double
+  rotator_material : @materials.OpticalMaterial
+}
+pub fn FaradayIsolator::calculate_isolation_db(Self, Double) -> Double
+pub fn FaradayIsolator::calculate_rotation_angle_deg(Self) -> Double
+pub fn FaradayIsolator::new(Double, Double, Double, @materials.OpticalMaterial) -> Self
+
+pub struct FiberBraggGrating {
+  grating_period_nm : Double
+  grating_length_mm : Double
+  core_effective_index : Double
+  index_modulation_delta_n : Double
+}
+pub fn FiberBraggGrating::calculate_bragg_wavelength_nm(Self) -> Double
+pub fn FiberBraggGrating::calculate_peak_reflectivity(Self) -> Double
+pub fn FiberBraggGrating::new(Double, Double, Double, Double) -> Self
+
+pub struct FizeauInterferometer {
+  source_wavelength_nm : Double
+  reference_flat_reflectance : Double
+  tilt_x_fringes : Double
+  tilt_y_fringes : Double
+}
+pub fn FizeauInterferometer::calculate_fringe_intensity(Self, Double, Double, Double) -> Double
+pub fn FizeauInterferometer::new(Double, Double, Double, Double) -> Self
+
+pub struct GlazingPerformanceMetrics {
+  visible_transmittance_tv : Double
+  solar_heat_gain_coefficient_shgc : Double
+  thermal_emissivity_ir : Double
+  u_value_w_m2k : Double
+} derive(Eq)
+pub impl Show for GlazingPerformanceMetrics
+
+pub struct GradedIndexFilm {
+  total_thickness_nm : Double
+  start_index : Double
+  end_index : Double
+  profile_type : GradedProfileType
+  num_slices : Int
+}
+pub fn GradedIndexFilm::discretize_to_stack(Self, @core.Layer, @core.Layer, Double) -> @core.MultiLayerStack
+pub fn GradedIndexFilm::new(Double, Double, Double, GradedProfileType, Int) -> Self
+
+pub(all) enum GradedProfileType {
+  Linear
+  Exponential
+  Parabolic
+  SinusoidalRugate(Double, Double)
+  ChebyshevOptimum
+} derive(Eq)
+
+pub struct GratingEffectiveIndices {
+  n_eff_te : Double
+  n_eff_tm : Double
+  birefringence_form : Double
+} derive(Eq)
+pub impl Show for GratingEffectiveIndices
+
+pub struct HMMAnisotropicPermittivity {
+  eps_parallel : @core.Complex
+  eps_perpendicular : @core.Complex
+  is_type_1_hyperbolic : Bool
+  is_type_2_hyperbolic : Bool
+  is_elliptic_dielectric : Bool
+} derive(Eq)
+pub impl Show for HMMAnisotropicPermittivity
+
+pub struct HyperbolicMetamaterial {
+  metal_material : @materials.OpticalMaterial
+  dielectric_material : @materials.OpticalMaterial
+  metal_fill_fraction : Double
+  unit_period_nm : Double
+}
+pub fn HyperbolicMetamaterial::calculate_effective_permittivities(Self, Double) -> HMMAnisotropicPermittivity
+pub fn HyperbolicMetamaterial::new(@materials.OpticalMaterial, @materials.OpticalMaterial, Double, Double) -> Self
+
+pub struct LaserOperatingMetrics {
+  threshold_pump_power_mw : Double
+  slope_efficiency_percent : Double
+  optimum_oc_reflectance : Double
+} derive(Eq)
+pub impl Show for LaserOperatingMetrics
+
+pub struct LiquidCrystalCell {
+  cell_gap_um : Double
+  ordinary_index : Double
+  extraordinary_index : Double
+  twist_angle_deg : Double
+  pretilt_angle_deg : Double
+}
+pub fn LiquidCrystalCell::discretize_slices(Self, Double, Int) -> Array[(@core.Complex, @core.Complex, Double, Double, Double)]
+pub fn LiquidCrystalCell::new(Double, Double, Double, Double, Double) -> Self
+pub fn LiquidCrystalCell::optical_retardation_rad(Self, Double) -> Double
+
+pub struct LowEGlazingDesign {
+  silver_layer_thickness_nm : Double
+  dielectric_bottom_thickness_nm : Double
+  dielectric_top_thickness_nm : Double
+  gas_gap_thickness_mm : Double
+}
+pub fn LowEGlazingDesign::evaluate_glazing(Self, @core.SpectrumGrid) -> GlazingPerformanceMetrics
+pub fn LowEGlazingDesign::new(Double, Double, Double, Double) -> Self
+
+pub struct MIMModeResult {
+  wavelength_nm : Double
+  effective_index_re : Double
+  effective_index_im : Double
+  propagation_length_um : Double
+  skin_depth_metal_nm : Double
+  confinement_factor : Double
+} derive(Eq)
+pub impl Show for MIMModeResult
+
+pub struct MIMWaveguide {
+  insulator_gap_nm : Double
+  insulator_material : @materials.OpticalMaterial
+  metal_cladding_material : @materials.OpticalMaterial
+}
+pub fn MIMWaveguide::new(Double, @materials.OpticalMaterial, @materials.OpticalMaterial) -> Self
+pub fn MIMWaveguide::solve_fundamental_mode(Self, Double) -> MIMModeResult
+
+pub struct MacNeillePBSDesign {
+  center_wavelength_nm : Double
+  prism_glass : @materials.OpticalMaterial
+  high_index_mat : @materials.OpticalMaterial
+  low_index_mat : @materials.OpticalMaterial
+  num_pairs : Int
+}
+pub fn MacNeillePBSDesign::build_stack(Self) -> @core.MultiLayerStack
+pub fn MacNeillePBSDesign::calculate_brewster_angle_in_prism(Self) -> Double
+pub fn MacNeillePBSDesign::new(Double, @materials.OpticalMaterial, @materials.OpticalMaterial, @materials.OpticalMaterial, Int) -> Self
+
+pub struct MultiCavityBandpassDesign {
+  center_wavelength_nm : Double
+  fwhm_bandwidth_nm : Double
+  num_cavities : Int
+  spacer_order_m : Int
+}
+pub fn MultiCavityBandpassDesign::calculate_shape_factor(Self) -> Double
+pub fn MultiCavityBandpassDesign::telecom_dense_wdm_100ghz() -> Self
+
+pub struct NPoMNanocavity {
+  nanoparticle_radius_nm : Double
+  molecular_gap_nm : Double
+  gap_refractive_index : Double
+  metal_substrate : @materials.OpticalMaterial
+}
+pub fn NPoMNanocavity::calculate_enhancement(Self) -> NanocavityEnhancementResult
+pub fn NPoMNanocavity::new(Double, Double, Double, @materials.OpticalMaterial) -> Self
+
+pub struct NanocavityEnhancementResult {
+  coupled_plasmon_resonance_nm : Double
+  electric_field_enhancement : Double
+  sers_enhancement_factor : Double
+  mode_volume_nm3 : Double
+} derive(Eq)
+pub impl Show for NanocavityEnhancementResult
+
+pub struct NonLinearPhaseMatching {
+  fundamental_wavelength_nm : Double
+  harmonic_wavelength_nm : Double
+  no_fundamental : Double
+  ne_fundamental : Double
+  no_harmonic : Double
+  ne_harmonic : Double
+}
+pub fn NonLinearPhaseMatching::calculate_type1_phase_matching_angle_deg(Self) -> Double
+pub fn NonLinearPhaseMatching::new(Double, Double, Double, Double, Double) -> Self
+
+pub struct NonPolarizingBeamSplitter {
+  center_wavelength_nm : Double
+  target_angle_deg : Double
+  stack : @core.MultiLayerStack
+}
+pub fn NonPolarizingBeamSplitter::new(Double, @materials.OpticalMaterial) -> Self
+
 pub struct OLEDMicrocavity {
   bottom_mirror_stack : @core.MultiLayerStack
   htl_thickness_nm : Double
@@ -56,6 +319,231 @@ pub struct OLEDMicrocavity {
 }
 pub fn OLEDMicrocavity::estimate_purcell_factor(Self, Double, Double, Double) -> Double
 pub fn OLEDMicrocavity::new(@core.MultiLayerStack, Double, Double, Double, Double, Double) -> Self
+
+pub struct OPVCellDesign {
+  ito_thickness_nm : Double
+  pedot_thickness_nm : Double
+  active_blend_thickness_nm : Double
+  pfn_thickness_nm : Double
+  ag_anode_thickness_nm : Double
+}
+pub fn OPVCellDesign::new(Double, Double, Double, Double, Double) -> Self
+pub fn OPVCellDesign::simulate_opv(Self, @core.SpectrumGrid) -> OPVOpticalResult
+
+pub struct OPVOpticalResult {
+  short_circuit_current_ma_cm2 : Double
+  active_layer_photons_absorbed : Double
+  internal_field_enhancement_factor : Double
+} derive(Eq)
+pub impl Show for OPVOpticalResult
+
+pub struct OpticalRingResonator {
+  ring_radius_um : Double
+  waveguide_effective_index : Double
+  power_coupling_coefficient_k2 : Double
+  round_trip_loss_alpha_db_cm : Double
+}
+pub fn OpticalRingResonator::calculate_fsr_nm(Self, Double) -> Double
+pub fn OpticalRingResonator::calculate_transmission(Self, Double) -> Double
+pub fn OpticalRingResonator::new(Double, Double, Double, Double) -> Self
+
+pub struct PBMetasurfaceMetalens {
+  focal_length_um : Double
+  design_wavelength_nm : Double
+  nanofin_height_nm : Double
+  nanofin_material : @materials.OpticalMaterial
+}
+pub fn PBMetasurfaceMetalens::calculate_focusing_phase_rad(Self, Double) -> Double
+pub fn PBMetasurfaceMetalens::calculate_nanofin_orientation_deg(Self, Double) -> Double
+pub fn PBMetasurfaceMetalens::new(Double, Double, Double, @materials.OpticalMaterial) -> Self
+
+pub struct PCFSupercontinuumSource {
+  fiber_length_m : Double
+  nonlinear_refractive_index_n2 : Double
+  effective_mode_area_um2 : Double
+  pump_peak_power_w : Double
+}
+pub fn PCFSupercontinuumSource::calculate_nonlinear_parameter_gamma(Self, Double) -> Double
+pub fn PCFSupercontinuumSource::calculate_spm_phase_shift_rad(Self, Double) -> Double
+pub fn PCFSupercontinuumSource::new(Double, Double, Double, Double) -> Self
+
+pub struct PancharatnamAchromaticWaveplate {
+  design_center_wavelength_nm : Double
+  plate_1_retardance_deg : Double
+  plate_1_azimuth_deg : Double
+  plate_2_retardance_deg : Double
+  plate_2_azimuth_deg : Double
+  plate_3_retardance_deg : Double
+  plate_3_azimuth_deg : Double
+}
+pub fn PancharatnamAchromaticWaveplate::achromatic_half_wave_plate() -> Self
+pub fn PancharatnamAchromaticWaveplate::achromatic_quarter_wave_plate() -> Self
+pub fn PancharatnamAchromaticWaveplate::calculate_effective_retardance_deg(Self, Double) -> Double
+
+pub struct PhaseChangeContrastResult {
+  wavelength_nm : Double
+  reflectance_state_0 : Double
+  reflectance_state_1 : Double
+  contrast_ratio_db : Double
+  absolute_modulation_depth : Double
+} derive(Eq)
+pub impl Show for PhaseChangeContrastResult
+
+pub struct PhaseChangeSwitch {
+  pcm_film_thickness_nm : Double
+  top_capping_thickness_nm : Double
+  bottom_reflector_thickness_nm : Double
+  substrate : @core.Layer
+}
+pub fn PhaseChangeSwitch::calculate_gst_contrast(Self, Double) -> PhaseChangeContrastResult
+pub fn PhaseChangeSwitch::new(Double, Double, Double, @core.Layer) -> Self
+
+pub struct PhotonicCrystal1D {
+  period_nm : Double
+  fill_factor_1 : Double
+  layer_1_material : @materials.OpticalMaterial
+  layer_2_material : @materials.OpticalMaterial
+  num_unit_cells : Int
+}
+pub fn PhotonicCrystal1D::calculate_bloch_point(Self, Double) -> BlochBandPoint
+pub fn PhotonicCrystal1D::new(Double, Double, @materials.OpticalMaterial, @materials.OpticalMaterial, Int) -> Self
+
+pub struct RadiativeCoolingStructure {
+  atmospheric_window_emissivity : Double
+  solar_weighted_reflectance : Double
+}
+pub fn RadiativeCoolingStructure::calculate_net_cooling_power(Self, Double, Double, Double) -> Double
+pub fn RadiativeCoolingStructure::new(Double, Double) -> Self
+
+pub struct RotatingPolarizerEllipsometer {
+  analyzer_azimuth_deg : Double
+  polarizer_frequency_hz : Double
+}
+pub fn RotatingPolarizerEllipsometer::new(Double, Double) -> Self
+pub fn RotatingPolarizerEllipsometer::simulate_harmonics(Self, Double, Double) -> EllipsometerHarmonics
+
+pub struct SNSPDCavityDesign {
+  nanowire_thickness_nm : Double
+  nanowire_fill_factor : Double
+  dielectric_spacer_thickness_nm : Double
+  gold_mirror_thickness_nm : Double
+  target_wavelength_nm : Double
+}
+pub fn SNSPDCavityDesign::calculate_optical_performance(Self) -> SNSPDPerformanceResult
+pub fn SNSPDCavityDesign::standard_telecom_1550nm() -> Self
+
+pub struct SNSPDPerformanceResult {
+  nanowire_optical_absorption : Double
+  stack_reflectance : Double
+  system_detection_efficiency_estimate : Double
+} derive(Eq)
+pub impl Show for SNSPDPerformanceResult
+
+pub struct SPRAngularScanResult {
+  angles_deg : Array[Double]
+  reflectance_tm : Array[Double]
+  resonance_angle_deg : Double
+  minimum_reflectance : Double
+  fwhm_deg : Double
+} derive(Eq)
+pub impl Show for SPRAngularScanResult
+
+pub struct SPRSensorDesign {
+  prism_material : @materials.OpticalMaterial
+  metal_material : @materials.OpticalMaterial
+  metal_thickness_nm : Double
+  adhesion_layer : (@materials.OpticalMaterial, Double)?
+  operating_wavelength_nm : Double
+}
+pub fn SPRSensorDesign::calculate_sensitivity(Self, Double, Double) -> Double
+pub fn SPRSensorDesign::new(@materials.OpticalMaterial, @materials.OpticalMaterial, Double, (@materials.OpticalMaterial, Double)?, Double) -> Self
+pub fn SPRSensorDesign::scan_angle(Self, Double, Double, Double, Int) -> SPRAngularScanResult
+
+pub struct ScintillatorCouplingSystem {
+  scintillator_material : @materials.OpticalMaterial
+  optical_grease_material : @materials.OpticalMaterial
+  grease_thickness_um : Double
+  photodetector_window_index : Double
+}
+pub fn ScintillatorCouplingSystem::calculate_light_extraction_efficiency(Self, Double) -> Double
+pub fn ScintillatorCouplingSystem::new(@materials.OpticalMaterial, @materials.OpticalMaterial, Double, Double) -> Self
+
+pub struct SolidStateLaserCavity {
+  gain_crystal : @materials.LaserGainProperties
+  crystal_length_mm : Double
+  output_coupler_reflectance : Double
+  passive_round_trip_loss : Double
+  pump_beam_radius_um : Double
+}
+pub fn SolidStateLaserCavity::calculate_laser_performance(Self, Double) -> LaserOperatingMetrics
+pub fn SolidStateLaserCavity::new(@materials.LaserGainProperties, Double, Double, Double, Double) -> Self
+
+pub struct SubwavelengthGrating {
+  grating_period_nm : Double
+  fill_factor : Double
+  ridge_material : @materials.OpticalMaterial
+  groove_material : @materials.OpticalMaterial
+  grating_depth_nm : Double
+}
+pub fn SubwavelengthGrating::calculate_effective_indices(Self, Double) -> GratingEffectiveIndices
+pub fn SubwavelengthGrating::new(Double, Double, @materials.OpticalMaterial, @materials.OpticalMaterial, Double) -> Self
+
+pub struct SuperAchromatDesign {
+  center_wavelength_nm : Double
+  target_retardance_deg : Double
+  plates_azimuths : Array[Double]
+  plates_retardances : Array[Double]
+}
+pub fn SuperAchromatDesign::standard_five_element_quarter_wave() -> Self
+
+pub struct TPVOpticalMetrics {
+  in_band_efficiency : Double
+  sub_bandgap_reflectance : Double
+  spectral_efficiency_percent : Double
+  potential_power_density_w_cm2 : Double
+} derive(Eq)
+pub impl Show for TPVOpticalMetrics
+
+pub struct TPVSimulationEngine {
+  emitter_temperature_k : Double
+  cell_bandgap_ev : Double
+  selective_filter_stack : @core.MultiLayerStack
+}
+pub fn TPVSimulationEngine::calculate_spectral_efficiency(Self, @core.SpectrumGrid) -> TPVOpticalMetrics
+pub fn TPVSimulationEngine::new(Double, Double, @core.MultiLayerStack) -> Self
+
+pub struct TandemCurrentResult {
+  j_top_ma_cm2 : Double
+  j_bottom_ma_cm2 : Double
+  j_matched_2t_ma_cm2 : Double
+  current_mismatch_percent : Double
+  top_absorption_spectrum : @core.SpectrumData
+  bottom_absorption_spectrum : @core.SpectrumData
+} derive(Eq)
+pub impl Show for TandemCurrentResult
+
+pub struct TandemSolarCell {
+  top_perovskite_thickness_nm : Double
+  bottom_silicon_thickness_um : Double
+  front_arc_thickness_nm : Double
+  recombination_layer_thickness_nm : Double
+}
+pub fn TandemSolarCell::new(Double, Double, Double, Double) -> Self
+pub fn TandemSolarCell::simulate_current_matching(Self, @core.SpectrumGrid) -> TandemCurrentResult
+
+pub struct VCSELDesign {
+  emission_wavelength_nm : Double
+  top_dbr_pairs : Int
+  bottom_dbr_pairs : Int
+  high_index_mat : @materials.OpticalMaterial
+  low_index_mat : @materials.OpticalMaterial
+  mqw_active_mat : @materials.OpticalMaterial
+  mqw_thickness_nm : Double
+  substrate : @core.Layer
+}
+pub fn VCSELDesign::build_stack(Self) -> @core.MultiLayerStack
+pub fn VCSELDesign::calculate_cavity_q(Self, @core.SpectrumGrid) -> Double
+pub fn VCSELDesign::new(Double, Int, Int, @materials.OpticalMaterial, @materials.OpticalMaterial, @materials.OpticalMaterial, Double, @core.Layer) -> Self
 
 // Type aliases
 
