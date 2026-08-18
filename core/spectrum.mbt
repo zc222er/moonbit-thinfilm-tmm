@@ -1,6 +1,6 @@
 ///|
 /// Wavelength representation in nanometers
-pub struct Wavelength {
+pub(all) struct Wavelength {
   nm : Double
 } derive(Eq, Default)
 
@@ -78,7 +78,7 @@ pub fn Wavelength::wavenumber_nm(self : Wavelength) -> Double {
 
 ///|
 /// Spectrum Grid defining a linear or custom range of wavelengths
-pub struct SpectrumGrid {
+pub(all) struct SpectrumGrid {
   wavelengths : Array[Double] // Wavelengths in nm
 } derive(Eq)
 
@@ -144,7 +144,7 @@ pub fn SpectrumGrid::get(self : SpectrumGrid, idx : Int) -> Double {
 
 ///|
 /// Spectrum Data consisting of wavelength-dependent values (e.g. R, T, A, n, k)
-pub struct SpectrumData {
+pub(all) struct SpectrumData {
   name : String
   grid : SpectrumGrid
   values : Array[Double]

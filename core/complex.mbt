@@ -1,6 +1,6 @@
 ///|
 /// Complex number representation and fundamental operations for optical calculations
-pub struct Complex {
+pub(all) struct Complex {
   re : Double
   im : Double
 } derive(Eq, Default)

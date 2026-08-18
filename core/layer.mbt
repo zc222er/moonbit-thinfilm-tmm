@@ -1,6 +1,6 @@
 ///|
 /// Light polarization state
-pub enum Polarization {
+pub(all) enum Polarization {
   TE // s-polarized: Electric field perpendicular to plane of incidence
   TM // p-polarized: Magnetic field perpendicular to plane of incidence
   Unpolarized // Equal 50/50 incoherent mixture of TE and TM
@@ -23,7 +23,7 @@ pub impl Show for Polarization with fn output(self, logger) {
 
 ///|
 /// Optical medium representation
-pub enum OpticalMedium {
+pub(all) enum OpticalMedium {
   Isotropic(Complex) // Complex refractive index n + i*k
   Anisotropic(Complex, Complex, Complex) // Principal complex indices (nx, ny, nz)
   Biaxial(Complex, Complex, Complex, Double, Double, Double) // (nx, ny, nz, Euler alpha, beta, gamma)
@@ -44,7 +44,7 @@ pub impl Show for OpticalMedium with fn output(self, logger) {
 
 ///|
 /// Layer in a multilayer optical stack
-pub struct Layer {
+pub(all) struct Layer {
   name : String
   thickness_nm : Double // Thickness in nanometers (0 for semi-infinite substrate/ambient)
   medium : OpticalMedium
@@ -139,7 +139,7 @@ pub fn Layer::incoherent(
 
 ///|
 /// Multilayer optical stack containing ambient, sequence of thin films, and substrate
-pub struct MultiLayerStack {
+pub(all) struct MultiLayerStack {
   ambient : Layer // Semi-infinite incident medium (e.g. Air n=1.0)
   layers : Array[Layer] // Intermediate thin film layers
   substrate : Layer // Semi-infinite or thick exit medium (e.g. Glass n=1.52 or Si)
@@ -192,7 +192,7 @@ pub fn MultiLayerStack::layer_count(self : MultiLayerStack) -> Int {
 
 ///|
 /// Angle of incidence wrapper in radians and degrees
-pub struct IncidentAngle {
+pub(all) struct IncidentAngle {
   radians : Double
 } derive(Eq, Default)
 

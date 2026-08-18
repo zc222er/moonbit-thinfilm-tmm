@@ -1,6 +1,6 @@
 ///|
 /// Complex reflection and transmission coefficients for a single wavelength and angle
-pub struct OpticalCoefficients {
+pub(all) struct OpticalCoefficients {
   r_te : Complex // Amplitude reflection coefficient for TE (s-pol)
   t_te : Complex // Amplitude transmission coefficient for TE (s-pol)
   r_tm : Complex // Amplitude reflection coefficient for TM (p-pol)
@@ -39,7 +39,7 @@ pub fn OpticalCoefficients::isotropic(
 
 ///|
 /// Energy power reflectance R, transmittance T, and absorptance A for a single wavelength
-pub struct SingleWavelengthResult {
+pub(all) struct SingleWavelengthResult {
   wavelength_nm : Double
   r_power : Double // Reflectance R = |r|^2 (0.0 to 1.0)
   t_power : Double // Transmittance T = (n_sub / n_amb) * |t|^2 (0.0 to 1.0)
@@ -61,7 +61,7 @@ pub impl Show for SingleWavelengthResult with fn output(self, logger) {
 
 ///|
 /// Full spectral optical simulation result
-pub struct SpectralSimulationResult {
+pub(all) struct SpectralSimulationResult {
   grid : SpectrumGrid
   reflectance : SpectrumData
   transmittance : SpectrumData
@@ -83,7 +83,7 @@ pub impl Show for SpectralSimulationResult with fn output(self, logger) {
 
 ///|
 /// Spatial depth point for electric and magnetic field distribution
-pub struct DepthFieldPoint {
+pub(all) struct DepthFieldPoint {
   z_nm : Double // Depth position in nanometers from ambient interface
   layer_index : Int // Index of the layer (-1 for ambient, 0..N-1 for films, N for substrate)
   e_intensity : Double // Normalized |E(z)|^2 / |E0|^2
@@ -105,7 +105,7 @@ pub impl Show for DepthFieldPoint with fn output(self, logger) {
 
 ///|
 /// Spatial depth field simulation profile
-pub struct DepthFieldProfile {
+pub(all) struct DepthFieldProfile {
   wavelength_nm : Double
   angle_deg : Double
   polarization : Polarization
@@ -122,7 +122,7 @@ pub impl Show for DepthFieldProfile with fn output(self, logger) {
 ///|
 /// Spectroscopic Ellipsometry parameters Psi and Delta
 /// tan(Psi) * exp(i * Delta) = r_p / r_s
-pub struct EllipsometryPoint {
+pub(all) struct EllipsometryPoint {
   wavelength_nm : Double
   psi_deg : Double // Psi in degrees (0 to 90 deg)
   delta_deg : Double // Delta in degrees (-180 to 180 deg or 0 to 360 deg)
@@ -140,7 +140,7 @@ pub impl Show for EllipsometryPoint with fn output(self, logger) {
 
 ///|
 /// Photovoltaic Solar Cell metrics
-pub struct SolarCellOpticalResult {
+pub(all) struct SolarCellOpticalResult {
   short_circuit_current_ma_cm2 : Double // Jsc in mA/cm^2 under AM1.5G
   integrated_absorption_fraction : Double // Fraction of AM1.5G photons absorbed (0.0 to 1.0)
   weighted_reflectance : Double // AM1.5G weighted solar reflectance
@@ -156,7 +156,7 @@ pub impl Show for SolarCellOpticalResult with fn output(self, logger) {
 
 ///|
 /// Non-linear parameter inversion & fitting result
-pub struct InversionResult {
+pub(all) struct InversionResult {
   converged : Bool
   iterations : Int
   final_residual_mse : Double

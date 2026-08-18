@@ -1,6 +1,6 @@
 ///|
 /// Real 2x2 Matrix
-pub struct Mat2x2 {
+pub(all) struct Mat2x2 {
   m00 : Double
   m01 : Double
   m10 : Double
@@ -101,7 +101,7 @@ pub fn Mat2x2::inv(self : Mat2x2) -> Mat2x2 {
 
 ///|
 /// Complex 2x2 Matrix for standard isotropic TMM
-pub struct Mat2x2C {
+pub(all) struct Mat2x2C {
   m00 : Complex
   m01 : Complex
   m10 : Complex
@@ -237,7 +237,7 @@ pub fn Mat2x2C::inv(self : Mat2x2C) -> Mat2x2C {
 
 ///|
 /// Complex 4x4 Matrix for Berreman 4x4 Anisotropic TMM
-pub struct Mat4x4C {
+pub(all) struct Mat4x4C {
   data : FixedArray[Complex]
 } derive(Eq)
 
@@ -372,7 +372,7 @@ pub fn Mat4x4C::trace(self : Mat4x4C) -> Complex {
 
 ///|
 /// 2D Vector
-pub struct Vec2 {
+pub(all) struct Vec2 {
   x : Double
   y : Double
 } derive(Eq, Default)
@@ -414,7 +414,7 @@ pub fn Vec2::norm(self : Vec2) -> Double {
 
 ///|
 /// 3D Vector
-pub struct Vec3 {
+pub(all) struct Vec3 {
   x : Double
   y : Double
   z : Double
@@ -466,7 +466,7 @@ pub fn Vec3::norm(self : Vec3) -> Double {
 
 ///|
 /// Complex 2-vector (Jones vector representation)
-pub struct Vec2C {
+pub(all) struct Vec2C {
   x : Complex
   y : Complex
 } derive(Eq, Default)
@@ -513,7 +513,7 @@ pub fn Vec2C::norm(self : Vec2C) -> Double {
 
 ///|
 /// Complex 4-vector (Berreman state vector [Ex, Hy, Ey, -Hx])
-pub struct Vec4C {
+pub(all) struct Vec4C {
   v0 : Complex
   v1 : Complex
   v2 : Complex
