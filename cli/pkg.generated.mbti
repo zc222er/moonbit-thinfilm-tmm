@@ -1,0 +1,27 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "zc222er/thinfilm_tmm/cli"
+
+import {
+  "zc222er/thinfilm_tmm/core",
+}
+
+// Values
+pub fn cmd_benchmark() -> String
+
+pub fn cmd_dbr(Int, Double) -> String
+
+pub fn cmd_materials() -> String
+
+pub fn cmd_simulate() -> String
+
+pub fn cmd_solar() -> String
+
+pub fn render_ascii_spectrum(@core.SpectrumData, Int, Int) -> String
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits

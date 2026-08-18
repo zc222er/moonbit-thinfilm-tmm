@@ -1,0 +1,118 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "zc222er/thinfilm_tmm/dispersion"
+
+import {
+  "zc222er/thinfilm_tmm/core",
+  "zc222er/thinfilm_tmm/math",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+pub struct BruggemanEMA {
+  phase_a_eps : @core.Complex
+  phase_b_eps : @core.Complex
+  fraction_a : Double
+} derive(Eq)
+pub fn BruggemanEMA::effective_permittivity(Self) -> @core.Complex
+pub fn BruggemanEMA::new(@core.Complex, @core.Complex, Double) -> Self
+
+pub struct CauchyDispersion {
+  a : Double
+  b : Double
+  c : Double
+  d : Double
+  e : Double
+} derive(Eq)
+pub fn CauchyDispersion::new(Double, Double, Double, Double, Double) -> Self
+pub fn CauchyDispersion::transparent(Double, Double, Double) -> Self
+pub impl Show for CauchyDispersion
+pub impl OpticalDispersion for CauchyDispersion
+
+pub struct ConstantDispersion {
+  n : Double
+  k : Double
+} derive(Eq)
+pub fn ConstantDispersion::new(Double, Double) -> Self
+pub impl Show for ConstantDispersion
+pub impl OpticalDispersion for ConstantDispersion
+
+pub struct DrudeDispersion {
+  eps_inf : Double
+  omega_p_ev : Double
+  gamma_ev : Double
+} derive(Eq)
+pub fn DrudeDispersion::new(Double, Double, Double) -> Self
+pub impl Show for DrudeDispersion
+pub impl OpticalDispersion for DrudeDispersion
+
+pub struct DrudeLorentzDispersion {
+  eps_inf : Double
+  drude : DrudeDispersion
+  oscillators : Array[LorentzOscillator]
+} derive(Eq)
+pub fn DrudeLorentzDispersion::new(Double, Double, Double, Array[LorentzOscillator]) -> Self
+pub impl Show for DrudeLorentzDispersion
+pub impl OpticalDispersion for DrudeLorentzDispersion
+
+pub struct LorentzOscillator {
+  amplitude_ev2 : Double
+  resonance_ev : Double
+  broadening_ev : Double
+} derive(Eq)
+pub fn LorentzOscillator::new(Double, Double, Double) -> Self
+
+pub struct MaxwellGarnettEMA {
+  host_eps : @core.Complex
+  inclusion_eps : @core.Complex
+  volume_fraction : Double
+} derive(Eq)
+pub fn MaxwellGarnettEMA::effective_permittivity(Self) -> @core.Complex
+pub fn MaxwellGarnettEMA::new(@core.Complex, @core.Complex, Double) -> Self
+
+pub struct Sellmeier3Dispersion {
+  b1 : Double
+  c1 : Double
+  b2 : Double
+  c2 : Double
+  b3 : Double
+  c3 : Double
+} derive(Eq)
+pub fn Sellmeier3Dispersion::bk7() -> Self
+pub fn Sellmeier3Dispersion::fused_silica() -> Self
+pub fn Sellmeier3Dispersion::new(Double, Double, Double, Double, Double, Double) -> Self
+pub impl Show for Sellmeier3Dispersion
+pub impl OpticalDispersion for Sellmeier3Dispersion
+
+pub struct TabulatedDispersion {
+  name : String
+  wavelengths : Array[Double]
+  n_values : Array[Double]
+  k_values : Array[Double]
+  n_spline : @math.CubicSpline
+  k_spline : @math.CubicSpline
+} derive(Eq)
+pub fn TabulatedDispersion::new(String, Array[Double], Array[Double], Array[Double]) -> Self
+pub impl Show for TabulatedDispersion
+pub impl OpticalDispersion for TabulatedDispersion
+
+pub struct TaucLorentzDispersion {
+  eps_inf : Double
+  amp_a : Double
+  peak_e0 : Double
+  broadening_c : Double
+  bandgap_eg : Double
+} derive(Eq)
+pub fn TaucLorentzDispersion::new(Double, Double, Double, Double, Double) -> Self
+pub impl Show for TaucLorentzDispersion
+pub impl OpticalDispersion for TaucLorentzDispersion
+
+// Type aliases
+
+// Traits
+pub trait OpticalDispersion {
+  fn get_complex_index(Self, Double) -> @core.Complex
+  fn get_permittivity(Self, Double) -> @core.Complex
+}

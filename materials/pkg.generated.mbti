@@ -1,0 +1,93 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "zc222er/thinfilm_tmm/materials"
+
+import {
+  "zc222er/thinfilm_tmm/core",
+}
+
+// Values
+pub fn air() -> OpticalMaterial
+
+pub fn aluminum() -> OpticalMaterial
+
+pub fn aluminum_oxide() -> OpticalMaterial
+
+pub fn amorphous_silicon() -> OpticalMaterial
+
+pub fn bk7() -> OpticalMaterial
+
+pub fn copper() -> OpticalMaterial
+
+pub fn crystalline_silicon() -> OpticalMaterial
+
+pub fn diamond() -> OpticalMaterial
+
+pub fn fused_silica() -> OpticalMaterial
+
+pub fn gallium_arsenide() -> OpticalMaterial
+
+pub fn gold() -> OpticalMaterial
+
+pub fn graphene_monolayer() -> OpticalMaterial
+
+pub fn hafnium_oxide() -> OpticalMaterial
+
+pub fn indium_tin_oxide() -> OpticalMaterial
+
+pub fn magnesium_fluoride() -> OpticalMaterial
+
+pub fn pedot_pss() -> OpticalMaterial
+
+pub fn perovskite_mapbi3() -> OpticalMaterial
+
+pub fn pmma() -> OpticalMaterial
+
+pub fn silicon_nitride() -> OpticalMaterial
+
+pub fn silver() -> OpticalMaterial
+
+pub fn tantalum_pentoxide() -> OpticalMaterial
+
+pub fn titanium_dioxide() -> OpticalMaterial
+
+pub fn vacuum() -> OpticalMaterial
+
+pub fn water() -> OpticalMaterial
+
+// Errors
+
+// Types and methods
+pub enum MaterialCategory {
+  Dielectric
+  Semiconductor
+  Metal
+  TCO
+  Polymer
+  TwoDimensional
+  Liquid
+} derive(Eq)
+pub impl Show for MaterialCategory
+
+pub struct MaterialDatabase {
+  materials : Array[OpticalMaterial]
+}
+pub fn MaterialDatabase::all(Self) -> Array[OpticalMaterial]
+pub fn MaterialDatabase::count(Self) -> Int
+pub fn MaterialDatabase::find(Self, String) -> OpticalMaterial?
+pub fn MaterialDatabase::standard() -> Self
+
+pub struct OpticalMaterial {
+  name : String
+  category : MaterialCategory
+  formula : String
+  bandgap_ev : Double
+  dispersion_fn : (Double) -> @core.Complex
+}
+pub fn OpticalMaterial::get_index(Self, Double) -> @core.Complex
+pub fn OpticalMaterial::to_layer(Self, Double, Double) -> @core.Layer
+pub impl Eq for OpticalMaterial
+pub impl Show for OpticalMaterial
+
+// Type aliases
+
+// Traits

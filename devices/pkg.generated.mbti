@@ -1,0 +1,62 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "zc222er/thinfilm_tmm/devices"
+
+import {
+  "zc222er/thinfilm_tmm/core",
+  "zc222er/thinfilm_tmm/materials",
+}
+
+// Values
+pub fn am15g_solar_irradiance(Double) -> Double
+
+pub fn calculate_solar_cell_jsc(@core.MultiLayerStack, Int, @core.SpectrumGrid) -> @core.SolarCellOpticalResult
+
+pub fn create_broadband_4layer_ar(@core.Layer, Double) -> @core.MultiLayerStack
+
+pub fn create_double_layer_ar(@core.Layer, Double, @materials.OpticalMaterial, @materials.OpticalMaterial) -> @core.MultiLayerStack
+
+pub fn create_perovskite_solar_cell(Double, Double) -> @core.MultiLayerStack
+
+pub fn create_single_layer_ar(@core.Layer, Double, @materials.OpticalMaterial) -> @core.MultiLayerStack
+
+// Errors
+
+// Types and methods
+pub struct DBRDesign {
+  center_wavelength_nm : Double
+  pairs : Int
+  high_index_material : @materials.OpticalMaterial
+  low_index_material : @materials.OpticalMaterial
+  substrate : @core.Layer
+}
+pub fn DBRDesign::analytical_peak_reflectance(Self) -> Double
+pub fn DBRDesign::analytical_stopband_width(Self) -> Double
+pub fn DBRDesign::build_stack(Self) -> @core.MultiLayerStack
+pub fn DBRDesign::new(Double, Int, @materials.OpticalMaterial, @materials.OpticalMaterial, @core.Layer) -> Self
+
+pub struct FabryPerotFilter {
+  center_wavelength_nm : Double
+  mirror_pairs : Int
+  cavity_order : Int
+  high_mat : @materials.OpticalMaterial
+  low_mat : @materials.OpticalMaterial
+  cavity_mat : @materials.OpticalMaterial
+  substrate : @core.Layer
+}
+pub fn FabryPerotFilter::build_stack(Self) -> @core.MultiLayerStack
+pub fn FabryPerotFilter::new(Double, Int, Int, @materials.OpticalMaterial, @materials.OpticalMaterial, @materials.OpticalMaterial, @core.Layer) -> Self
+
+pub struct OLEDMicrocavity {
+  bottom_mirror_stack : @core.MultiLayerStack
+  htl_thickness_nm : Double
+  eml_thickness_nm : Double
+  etl_thickness_nm : Double
+  top_cathode_transmittance : Double
+  emission_wavelength_nm : Double
+}
+pub fn OLEDMicrocavity::estimate_purcell_factor(Self, Double, Double, Double) -> Double
+pub fn OLEDMicrocavity::new(@core.MultiLayerStack, Double, Double, Double, Double, Double) -> Self
+
+// Type aliases
+
+// Traits

@@ -1,0 +1,28 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "zc222er/thinfilm_tmm/field"
+
+import {
+  "zc222er/thinfilm_tmm/core",
+}
+
+// Values
+pub fn calculate_spatial_field_profile(@core.MultiLayerStack, Double, @core.IncidentAngle, @core.Polarization, Int) -> @core.DepthFieldProfile
+
+pub fn solve_layer_amplitudes(@core.MultiLayerStack, Double, @core.IncidentAngle, @core.Polarization) -> Array[LayerWaveAmplitudes]
+
+// Errors
+
+// Types and methods
+pub struct LayerWaveAmplitudes {
+  e_plus : @core.Complex
+  e_minus : @core.Complex
+  kz : @core.Complex
+  n : @core.Complex
+  z_start_nm : Double
+  z_end_nm : Double
+  layer_idx : Int
+} derive(Eq)
+
+// Type aliases
+
+// Traits

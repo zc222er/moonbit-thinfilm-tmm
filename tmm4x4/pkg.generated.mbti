@@ -1,0 +1,46 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "zc222er/thinfilm_tmm/tmm4x4"
+
+import {
+  "zc222er/thinfilm_tmm/core",
+}
+
+// Values
+pub fn calculate_anisotropic_layer_matrix(PermittivityTensor, Double, Double, Double) -> @core.Mat4x4C
+
+pub fn construct_berreman_delta(PermittivityTensor, Double) -> @core.Mat4x4C
+
+pub fn solve_berreman_4x4(@core.Complex, Array[(PermittivityTensor, Double)], @core.Complex, Double, @core.IncidentAngle) -> JonesMatrixResult
+
+// Errors
+
+// Types and methods
+pub struct JonesMatrixResult {
+  r_ss : @core.Complex
+  r_sp : @core.Complex
+  r_ps : @core.Complex
+  r_pp : @core.Complex
+  t_ss : @core.Complex
+  t_sp : @core.Complex
+  t_ps : @core.Complex
+  t_pp : @core.Complex
+} derive(Eq)
+pub impl Show for JonesMatrixResult
+
+pub struct PermittivityTensor {
+  exx : @core.Complex
+  exy : @core.Complex
+  exz : @core.Complex
+  eyx : @core.Complex
+  eyy : @core.Complex
+  eyz : @core.Complex
+  ezx : @core.Complex
+  ezy : @core.Complex
+  ezz : @core.Complex
+} derive(Eq)
+pub fn PermittivityTensor::isotropic(@core.Complex) -> Self
+pub fn PermittivityTensor::uniaxial(@core.Complex, @core.Complex, Double, Double) -> Self
+
+// Type aliases
+
+// Traits

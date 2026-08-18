@@ -1,0 +1,17 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "zc222er/thinfilm_tmm/wasm"
+
+// Values
+pub fn wasm_estimate_film_color(Double, Double, Double) -> Int
+
+pub fn wasm_fit_single_layer_thickness(Array[Double], Double, Double, Double, Double) -> Double
+
+pub fn wasm_solve_single_layer(Double, Double, Double, Double, Double, Double) -> Double
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits

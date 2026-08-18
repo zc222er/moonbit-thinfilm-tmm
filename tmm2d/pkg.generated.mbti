@@ -1,0 +1,42 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "zc222er/thinfilm_tmm/tmm2d"
+
+import {
+  "zc222er/thinfilm_tmm/core",
+  "zc222er/thinfilm_tmm/materials",
+}
+
+// Values
+pub fn calculate_admittance(@core.Complex, @core.Complex, Double, @core.Polarization) -> @core.Complex
+
+pub fn calculate_characteristic_matrix(@core.Complex, Double, @core.Complex) -> @core.Mat2x2C
+
+pub fn calculate_gdd(@core.MultiLayerStack, Double, @core.IncidentAngle) -> ChromaticDispersionResult
+
+pub fn calculate_kz(@core.Complex, @core.Complex, Double, Double) -> @core.Complex
+
+pub fn get_layer_isotropic_index(@core.Layer) -> @core.Complex
+
+pub fn solve_dispersive_spectrum(@materials.OpticalMaterial, Array[(@materials.OpticalMaterial, Double)], @materials.OpticalMaterial, @core.SpectrumGrid, @core.IncidentAngle) -> @core.SpectralSimulationResult
+
+pub fn solve_ellipsometry(@core.MultiLayerStack, Double, @core.IncidentAngle) -> @core.EllipsometryPoint
+
+pub fn solve_spectrum(@core.MultiLayerStack, @core.SpectrumGrid, @core.IncidentAngle) -> @core.SpectralSimulationResult
+
+pub fn solve_tmm2d_coefficients(@core.MultiLayerStack, Double, @core.IncidentAngle) -> @core.OpticalCoefficients
+
+pub fn solve_tmm2d_single(@core.MultiLayerStack, Double, @core.IncidentAngle) -> @core.SingleWavelengthResult
+
+// Errors
+
+// Types and methods
+pub struct ChromaticDispersionResult {
+  wavelength_nm : Double
+  group_delay_fs : Double
+  gdd_fs2 : Double
+  tod_fs3 : Double
+} derive(Eq)
+
+// Type aliases
+
+// Traits

@@ -1,0 +1,351 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "zc222er/thinfilm_tmm/core"
+
+// Values
+
+// Errors
+
+// Types and methods
+pub(all) struct Complex {
+  re : Double
+  im : Double
+} derive(Default, Eq)
+pub fn Complex::abs(Self) -> Double
+pub fn Complex::add(Self, Self) -> Self
+pub fn Complex::add_real(Self, Double) -> Self
+pub fn Complex::approx_eq(Self, Self, Double) -> Bool
+pub fn Complex::arg(Self) -> Double
+pub fn Complex::conj(Self) -> Self
+pub fn Complex::cos(Self) -> Self
+pub fn Complex::cosh(Self) -> Self
+pub fn Complex::div(Self, Self) -> Self
+pub fn Complex::div_real(Self, Double) -> Self
+pub fn Complex::exp(Self) -> Self
+pub fn Complex::from_imag(Double) -> Self
+pub fn Complex::from_polar(Double, Double) -> Self
+pub fn Complex::from_real(Double) -> Self
+pub fn Complex::i() -> Self
+pub fn Complex::inv(Self) -> Self
+pub fn Complex::ln(Self) -> Self
+pub fn Complex::mul(Self, Self) -> Self
+pub fn Complex::mul_real(Self, Double) -> Self
+pub fn Complex::neg(Self) -> Self
+pub fn Complex::new(Double, Double) -> Self
+pub fn Complex::norm_sq(Self) -> Double
+pub fn Complex::one() -> Self
+pub fn Complex::op_add(Self, Self) -> Self
+pub fn Complex::op_div(Self, Self) -> Self
+pub fn Complex::op_mul(Self, Self) -> Self
+pub fn Complex::op_neg(Self) -> Self
+pub fn Complex::op_sub(Self, Self) -> Self
+pub fn Complex::pow(Self, Self) -> Self
+pub fn Complex::pow_real(Self, Double) -> Self
+pub fn Complex::sin(Self) -> Self
+pub fn Complex::sinh(Self) -> Self
+pub fn Complex::sqrt(Self) -> Self
+pub fn Complex::sub(Self, Self) -> Self
+pub fn Complex::sub_real(Self, Double) -> Self
+pub fn Complex::tan(Self) -> Self
+pub fn Complex::tanh(Self) -> Self
+pub fn Complex::zero() -> Self
+pub impl Show for Complex
+
+pub(all) struct DepthFieldPoint {
+  z_nm : Double
+  layer_index : Int
+  e_intensity : Double
+  ex : Complex
+  ey : Complex
+  ez : Complex
+  hx : Complex
+  hy : Complex
+  poynting_z : Double
+  absorption_rate : Double
+} derive(Default, Eq)
+pub fn DepthFieldPoint::new(Double, Int, Double, Complex, Complex, Complex, Complex, Complex, Double, Double) -> Self
+pub impl Show for DepthFieldPoint
+
+pub(all) struct DepthFieldProfile {
+  wavelength_nm : Double
+  angle_deg : Double
+  polarization : Polarization
+  points : Array[DepthFieldPoint]
+} derive(Eq)
+pub impl Show for DepthFieldProfile
+
+pub(all) struct EllipsometryPoint {
+  wavelength_nm : Double
+  psi_deg : Double
+  delta_deg : Double
+  tan_psi : Double
+  cos_delta : Double
+  rho : Complex
+} derive(Default, Eq)
+pub impl Show for EllipsometryPoint
+
+pub(all) struct IncidentAngle {
+  radians : Double
+} derive(Default, Eq)
+pub fn IncidentAngle::from_deg(Double) -> Self
+pub fn IncidentAngle::from_rad(Double) -> Self
+pub fn IncidentAngle::normal() -> Self
+pub fn IncidentAngle::to_deg(Self) -> Double
+pub fn IncidentAngle::to_rad(Self) -> Double
+pub impl Show for IncidentAngle
+
+pub(all) struct InversionResult {
+  converged : Bool
+  iterations : Int
+  final_residual_mse : Double
+  optimized_parameters : Array[Double]
+  parameter_names : Array[String]
+  uncertainties : Array[Double]
+  message : String
+} derive(Eq)
+pub impl Show for InversionResult
+
+pub(all) struct Layer {
+  name : String
+  thickness_nm : Double
+  medium : OpticalMedium
+  is_coherent : Bool
+} derive(Eq)
+pub fn Layer::absorbing(String, Double, Double, Double) -> Self
+pub fn Layer::anisotropic(String, Double, Complex, Complex, Complex) -> Self
+pub fn Layer::biaxial(String, Double, Complex, Complex, Complex, Double, Double, Double) -> Self
+pub fn Layer::incoherent(String, Double, Complex) -> Self
+pub fn Layer::new(String, Double, Complex) -> Self
+pub fn Layer::real(String, Double, Double) -> Self
+pub impl Show for Layer
+
+pub(all) struct Mat2x2 {
+  m00 : Double
+  m01 : Double
+  m10 : Double
+  m11 : Double
+} derive(Default, Eq)
+pub fn Mat2x2::add(Self, Self) -> Self
+pub fn Mat2x2::det(Self) -> Double
+pub fn Mat2x2::identity() -> Self
+pub fn Mat2x2::inv(Self) -> Self
+pub fn Mat2x2::mul(Self, Self) -> Self
+pub fn Mat2x2::new(Double, Double, Double, Double) -> Self
+pub fn Mat2x2::scale(Self, Double) -> Self
+pub fn Mat2x2::sub(Self, Self) -> Self
+pub fn Mat2x2::trace(Self) -> Double
+pub fn Mat2x2::transpose(Self) -> Self
+pub fn Mat2x2::zero() -> Self
+pub impl Show for Mat2x2
+
+pub(all) struct Mat2x2C {
+  m00 : Complex
+  m01 : Complex
+  m10 : Complex
+  m11 : Complex
+} derive(Default, Eq)
+pub fn Mat2x2C::add(Self, Self) -> Self
+pub fn Mat2x2C::dagger(Self) -> Self
+pub fn Mat2x2C::det(Self) -> Complex
+pub fn Mat2x2C::identity() -> Self
+pub fn Mat2x2C::inv(Self) -> Self
+pub fn Mat2x2C::mul(Self, Self) -> Self
+pub fn Mat2x2C::mul_vec(Self, Vec2C) -> Vec2C
+pub fn Mat2x2C::new(Complex, Complex, Complex, Complex) -> Self
+pub fn Mat2x2C::scale(Self, Complex) -> Self
+pub fn Mat2x2C::scale_real(Self, Double) -> Self
+pub fn Mat2x2C::sub(Self, Self) -> Self
+pub fn Mat2x2C::trace(Self) -> Complex
+pub fn Mat2x2C::transpose(Self) -> Self
+pub fn Mat2x2C::zero() -> Self
+pub impl Show for Mat2x2C
+
+pub(all) struct Mat4x4C {
+  data : FixedArray[Complex]
+} derive(Eq)
+pub fn Mat4x4C::add(Self, Self) -> Self
+pub fn Mat4x4C::clone(Self) -> Self
+pub fn Mat4x4C::dagger(Self) -> Self
+pub fn Mat4x4C::get(Self, Int, Int) -> Complex
+pub fn Mat4x4C::identity() -> Self
+pub fn Mat4x4C::mul(Self, Self) -> Self
+pub fn Mat4x4C::mul_vec(Self, Vec4C) -> Vec4C
+pub fn Mat4x4C::new() -> Self
+pub fn Mat4x4C::scale(Self, Complex) -> Self
+pub fn Mat4x4C::set(Self, Int, Int, Complex) -> Unit
+pub fn Mat4x4C::sub(Self, Self) -> Self
+pub fn Mat4x4C::trace(Self) -> Complex
+pub fn Mat4x4C::transpose(Self) -> Self
+pub fn Mat4x4C::zero() -> Self
+pub impl Show for Mat4x4C
+
+pub(all) struct MultiLayerStack {
+  ambient : Layer
+  layers : Array[Layer]
+  substrate : Layer
+} derive(Eq)
+pub fn MultiLayerStack::add_layer(Self, Layer) -> Self
+pub fn MultiLayerStack::air_substrate(Layer) -> Self
+pub fn MultiLayerStack::layer_count(Self) -> Int
+pub fn MultiLayerStack::new(Layer, Array[Layer], Layer) -> Self
+pub fn MultiLayerStack::total_thickness(Self) -> Double
+pub impl Show for MultiLayerStack
+
+pub(all) struct OpticalCoefficients {
+  r_te : Complex
+  t_te : Complex
+  r_tm : Complex
+  t_tm : Complex
+  r_cross_sp : Complex
+  r_cross_ps : Complex
+  t_cross_sp : Complex
+  t_cross_ps : Complex
+} derive(Default, Eq)
+pub fn OpticalCoefficients::isotropic(Complex, Complex, Complex, Complex) -> Self
+pub impl Show for OpticalCoefficients
+
+pub(all) enum OpticalMedium {
+  Isotropic(Complex)
+  Anisotropic(Complex, Complex, Complex)
+  Biaxial(Complex, Complex, Complex, Double, Double, Double)
+} derive(Eq)
+pub impl Show for OpticalMedium
+
+pub(all) enum Polarization {
+  TE
+  TM
+  Unpolarized
+  CircularLeft
+  CircularRight
+  Arbitrary(Double)
+} derive(Eq)
+pub impl Show for Polarization
+
+pub(all) struct SingleWavelengthResult {
+  wavelength_nm : Double
+  r_power : Double
+  t_power : Double
+  a_power : Double
+  phase_r_deg : Double
+  phase_t_deg : Double
+  r_te_power : Double
+  t_te_power : Double
+  r_tm_power : Double
+  t_tm_power : Double
+} derive(Default, Eq)
+pub impl Show for SingleWavelengthResult
+
+pub(all) struct SolarCellOpticalResult {
+  short_circuit_current_ma_cm2 : Double
+  integrated_absorption_fraction : Double
+  weighted_reflectance : Double
+  active_layer_absorption : SpectrumData
+} derive(Eq)
+pub impl Show for SolarCellOpticalResult
+
+pub(all) struct SpectralSimulationResult {
+  grid : SpectrumGrid
+  reflectance : SpectrumData
+  transmittance : SpectrumData
+  absorptance : SpectrumData
+  r_te : SpectrumData
+  t_te : SpectrumData
+  r_tm : SpectrumData
+  t_tm : SpectrumData
+  phase_r : SpectrumData
+  phase_t : SpectrumData
+} derive(Eq)
+pub impl Show for SpectralSimulationResult
+
+pub(all) struct SpectrumData {
+  name : String
+  grid : SpectrumGrid
+  values : Array[Double]
+} derive(Eq)
+pub fn SpectrumData::get(Self, Int) -> Double
+pub fn SpectrumData::interpolate_linear(Self, Double) -> Double
+pub fn SpectrumData::new(String, SpectrumGrid, Array[Double]) -> Self
+pub fn SpectrumData::zeros(String, SpectrumGrid) -> Self
+pub impl Show for SpectrumData
+
+pub(all) struct SpectrumGrid {
+  wavelengths : Array[Double]
+} derive(Eq)
+pub fn SpectrumGrid::count(Self) -> Int
+pub fn SpectrumGrid::from_array(Array[Double]) -> Self
+pub fn SpectrumGrid::get(Self, Int) -> Double
+pub fn SpectrumGrid::linear(Double, Double, Int) -> Self
+pub fn SpectrumGrid::solar_spectrum(Int) -> Self
+pub fn SpectrumGrid::telecom_c_band(Int) -> Self
+pub fn SpectrumGrid::visible_spectrum(Int) -> Self
+pub impl Show for SpectrumGrid
+
+pub(all) struct Vec2 {
+  x : Double
+  y : Double
+} derive(Default, Eq)
+pub fn Vec2::add(Self, Self) -> Self
+pub fn Vec2::dot(Self, Self) -> Double
+pub fn Vec2::new(Double, Double) -> Self
+pub fn Vec2::norm(Self) -> Double
+pub fn Vec2::scale(Self, Double) -> Self
+pub fn Vec2::sub(Self, Self) -> Self
+pub impl Show for Vec2
+
+pub(all) struct Vec2C {
+  x : Complex
+  y : Complex
+} derive(Default, Eq)
+pub fn Vec2C::add(Self, Self) -> Self
+pub fn Vec2C::new(Complex, Complex) -> Self
+pub fn Vec2C::norm(Self) -> Double
+pub fn Vec2C::norm_sq(Self) -> Double
+pub fn Vec2C::scale(Self, Complex) -> Self
+pub fn Vec2C::scale_real(Self, Double) -> Self
+pub fn Vec2C::sub(Self, Self) -> Self
+pub impl Show for Vec2C
+
+pub(all) struct Vec3 {
+  x : Double
+  y : Double
+  z : Double
+} derive(Default, Eq)
+pub fn Vec3::add(Self, Self) -> Self
+pub fn Vec3::cross(Self, Self) -> Self
+pub fn Vec3::dot(Self, Self) -> Double
+pub fn Vec3::new(Double, Double, Double) -> Self
+pub fn Vec3::norm(Self) -> Double
+pub fn Vec3::scale(Self, Double) -> Self
+pub fn Vec3::sub(Self, Self) -> Self
+pub impl Show for Vec3
+
+pub(all) struct Vec4C {
+  v0 : Complex
+  v1 : Complex
+  v2 : Complex
+  v3 : Complex
+} derive(Default, Eq)
+pub fn Vec4C::add(Self, Self) -> Self
+pub fn Vec4C::new(Complex, Complex, Complex, Complex) -> Self
+pub fn Vec4C::norm_sq(Self) -> Double
+pub fn Vec4C::scale(Self, Complex) -> Self
+pub fn Vec4C::sub(Self, Self) -> Self
+pub fn Vec4C::zero() -> Self
+pub impl Show for Vec4C
+
+pub(all) struct Wavelength {
+  nm : Double
+} derive(Default, Eq)
+pub fn Wavelength::from_ev(Double) -> Self
+pub fn Wavelength::from_m(Double) -> Self
+pub fn Wavelength::from_nm(Double) -> Self
+pub fn Wavelength::from_um(Double) -> Self
+pub fn Wavelength::to_angular_frequency(Self) -> Double
+pub fn Wavelength::to_ev(Self) -> Double
+pub fn Wavelength::to_m(Self) -> Double
+pub fn Wavelength::to_um(Self) -> Double
+pub fn Wavelength::wavenumber_nm(Self) -> Double
+pub impl Show for Wavelength
+
+// Type aliases
+
+// Traits

@@ -1,0 +1,35 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "zc222er/thinfilm_tmm/inversion"
+
+import {
+  "zc222er/thinfilm_tmm/core",
+  "zc222er/thinfilm_tmm/math",
+}
+
+// Values
+pub fn compute_jacobian((Array[Double]) -> Array[Double], Array[Double], Double) -> @math.Matrix
+
+pub fn compute_mse(Array[Double]) -> Double
+
+pub fn differential_evolution((Array[Double]) -> Double, Array[ParameterBound], Int, Int, Double, Double) -> Array[Double]
+
+pub fn fit_cauchy_film(@core.Layer, @core.SpectrumData, Double, Double, Double) -> @core.InversionResult
+
+pub fn fit_single_layer_rn(@core.Layer, @core.SpectrumData, Double, Double) -> @core.InversionResult
+
+pub fn levenberg_marquardt((Array[Double]) -> Array[Double], Array[Double], Array[ParameterBound], Int, Double) -> @core.InversionResult
+
+// Errors
+
+// Types and methods
+pub struct ParameterBound {
+  name : String
+  min_val : Double
+  max_val : Double
+  initial_guess : Double
+} derive(Eq)
+pub fn ParameterBound::new(String, Double, Double, Double) -> Self
+
+// Type aliases
+
+// Traits

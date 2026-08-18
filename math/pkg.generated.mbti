@@ -1,0 +1,107 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "zc222er/thinfilm_tmm/math"
+
+import {
+  "zc222er/thinfilm_tmm/core",
+}
+
+// Values
+pub fn composite_gauss_legendre((Double) -> Double, Double, Double, Int) -> Double
+
+pub fn gauss_legendre_5point((Double) -> Double, Double, Double) -> Double
+
+pub fn kramers_kronig_k_to_delta_n(Array[Double], Array[Double], Double) -> Double
+
+pub fn matrix_exp_4x4(@core.Mat4x4C) -> @core.Mat4x4C
+
+pub fn simpson_rule(Array[Double], Array[Double]) -> Double
+
+pub fn trapezoid_rule(Array[Double], Array[Double]) -> Double
+
+pub fn verify_kramers_kronig_consistency(Array[Double], Array[Double], Array[Double]) -> Double
+
+// Errors
+
+// Types and methods
+pub struct Bilinear2D {
+  x_grid : Array[Double]
+  y_grid : Array[Double]
+  z_data : Matrix
+} derive(Eq)
+pub fn Bilinear2D::eval(Self, Double, Double) -> Double
+pub fn Bilinear2D::new(Array[Double], Array[Double], Matrix) -> Self
+
+pub struct CubicSpline {
+  x : Array[Double]
+  y : Array[Double]
+  a : Array[Double]
+  b : Array[Double]
+  c : Array[Double]
+  d : Array[Double]
+} derive(Eq)
+pub fn CubicSpline::eval(Self, Double) -> Double
+pub fn CubicSpline::new(Array[Double], Array[Double]) -> Self
+
+pub struct LUDecomposition {
+  lu : Matrix
+  pivots : Array[Int]
+  num_swaps : Int
+} derive(Eq)
+pub fn LUDecomposition::det(Self) -> Double
+pub fn LUDecomposition::solve(Self, Array[Double]) -> Array[Double]
+
+pub struct LUDecompositionC {
+  lu : MatrixC
+  pivots : Array[Int]
+} derive(Eq)
+pub fn LUDecompositionC::solve(Self, Array[@core.Complex]) -> Array[@core.Complex]
+
+pub struct Matrix {
+  rows : Int
+  cols : Int
+  data : Array[Double]
+} derive(Eq)
+pub fn Matrix::add(Self, Self) -> Self
+pub fn Matrix::clone(Self) -> Self
+pub fn Matrix::from_array2d(Array[Array[Double]]) -> Self
+pub fn Matrix::get(Self, Int, Int) -> Double
+pub fn Matrix::identity(Int) -> Self
+pub fn Matrix::inv(Self) -> Self
+pub fn Matrix::lu_decompose(Self) -> LUDecomposition
+pub fn Matrix::mul(Self, Self) -> Self
+pub fn Matrix::mul_vec(Self, Array[Double]) -> Array[Double]
+pub fn Matrix::scale(Self, Double) -> Self
+pub fn Matrix::set(Self, Int, Int, Double) -> Unit
+pub fn Matrix::sub(Self, Self) -> Self
+pub fn Matrix::transpose(Self) -> Self
+pub fn Matrix::zeros(Int, Int) -> Self
+pub impl Show for Matrix
+
+pub struct MatrixC {
+  rows : Int
+  cols : Int
+  data : Array[@core.Complex]
+} derive(Eq)
+pub fn MatrixC::clone(Self) -> Self
+pub fn MatrixC::get(Self, Int, Int) -> @core.Complex
+pub fn MatrixC::identity(Int) -> Self
+pub fn MatrixC::inv(Self) -> Self
+pub fn MatrixC::lu_decompose(Self) -> LUDecompositionC
+pub fn MatrixC::mul(Self, Self) -> Self
+pub fn MatrixC::mul_vec(Self, Array[@core.Complex]) -> Array[@core.Complex]
+pub fn MatrixC::set(Self, Int, Int, @core.Complex) -> Unit
+pub fn MatrixC::zeros(Int, Int) -> Self
+
+pub struct Rng {
+  mut state : UInt64
+} derive(Eq)
+pub fn Rng::default() -> Self
+pub fn Rng::new(UInt64) -> Self
+pub fn Rng::next_double(Self) -> Double
+pub fn Rng::next_gaussian(Self, Double, Double) -> Double
+pub fn Rng::next_range(Self, Double, Double) -> Double
+pub fn Rng::next_u64(Self) -> UInt64
+
+// Type aliases
+
+// Traits

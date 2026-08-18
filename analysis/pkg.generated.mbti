@@ -1,0 +1,39 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "zc222er/thinfilm_tmm/analysis"
+
+import {
+  "zc222er/thinfilm_tmm/core",
+}
+
+// Values
+pub fn get_cie_table() -> Array[CIEColorMatchPoint]
+
+pub fn spectrum_to_color(@core.SpectrumData) -> CIEXYZColor
+
+// Errors
+
+// Types and methods
+pub struct CIEColorMatchPoint {
+  wl_nm : Double
+  x_bar : Double
+  y_bar : Double
+  z_bar : Double
+  d65 : Double
+} derive(Eq)
+
+pub struct CIEXYZColor {
+  x_val : Double
+  y_val : Double
+  z_val : Double
+  chroma_x : Double
+  chroma_y : Double
+  srgb_r : Int
+  srgb_g : Int
+  srgb_b : Int
+  hex_code : String
+} derive(Eq)
+pub impl Show for CIEXYZColor
+
+// Type aliases
+
+// Traits
