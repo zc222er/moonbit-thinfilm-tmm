@@ -97,6 +97,33 @@ pub(all) struct DepthFieldPoint {
 } derive(Eq, Default)
 
 ///|
+pub fn DepthFieldPoint::new(
+  z_nm : Double,
+  layer_index : Int,
+  e_intensity : Double,
+  ex : Complex,
+  ey : Complex,
+  ez : Complex,
+  hx : Complex,
+  hy : Complex,
+  poynting_z : Double,
+  absorption_rate : Double,
+) -> DepthFieldPoint {
+  {
+    z_nm,
+    layer_index,
+    e_intensity,
+    ex,
+    ey,
+    ez,
+    hx,
+    hy,
+    poynting_z,
+    absorption_rate,
+  }
+}
+
+///|
 pub impl Show for DepthFieldPoint with fn output(self, logger) {
   logger.write_string(
     "FieldPoint(z=\{self.z_nm}nm, |E|^2=\{self.e_intensity}, Sz=\{self.poynting_z})",
