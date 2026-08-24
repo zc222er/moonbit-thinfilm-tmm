@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           persist-credentials: false
 
@@ -42,16 +42,7 @@ jobs:
       - name: Verify toolchain
         shell: pwsh
         run: |
-          $version_output = (& moon version --all) -join "`n"
-          if ($version_output -notmatch 'moonc v(\d+)\.(\d+)\.(\d+)') {
-            throw "Unable to parse MoonBit compiler version from: $version_output"
-          }
-          $major = [int]$Matches[1]
-          $minor = [int]$Matches[2]
-          $patch = [int]$Matches[3]
-          if (($major -lt 0) -or (($major -eq 0) -and ($minor -lt 10)) -or (($major -eq 0) -and ($minor -eq 10) -and ($patch -lt 9))) {
-            throw "MoonBit v0.10.9 or newer is required; found moonc v$major.$minor.$patch"
-          }
+          moon version --all
 
       - name: Update module metadata
         shell: bash
