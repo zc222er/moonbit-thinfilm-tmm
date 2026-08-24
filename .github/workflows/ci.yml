@@ -4,36 +4,84 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
+
+permissions:
+  contents: read
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  check:
+    name: MoonBit (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
-      - name: Install MoonBit CLI
+      - name: Install MoonBit (Unix)
+        if: runner.os != 'Windows'
+        shell: bash
         run: |
           curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
-          echo "$HOME/.moon/bin" >> $GITHUB_PATH
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
-      - name: Print MoonBit version
+      - name: Install MoonBit (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+          irm https://cli.moonbitlang.com/install/powershell.ps1 | iex
+          "$HOME/.moon/bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+
+      - name: Verify toolchain
+        shell: pwsh
         run: |
           moon version --all
+          $version = (& moonc --version) -join " "
+          if ($version -notmatch 'v(\d+)\.(\d+)\.(\d+)') {
+            throw "Unable to parse MoonBit compiler version: $version"
+          }
+          $major = [int]$Matches[1]
+          $minor = [int]$Matches[2]
+          $patch = [int]$Matches[3]
+          if (($major -lt 0) -or (($major -eq 0) -and ($minor -lt 10)) -or (($major -eq 0) -and ($minor -eq 10) -and ($patch -lt 9))) {
+            throw "MoonBit v0.10.9 or newer is required; found $version"
+          }
 
-      - name: Check code formatting
+      - name: Update module metadata
+        shell: bash
+        run: moon update
+
+      - name: Check formatting
+        shell: bash
+        run: moon fmt --check
+
+      - name: Check all targets with warnings denied
+        shell: bash
+        run: moon check --deny-warn --target all
+
+      - name: Build native and wasm-gc targets
+        shell: bash
         run: |
-          moon fmt --check
+          moon build --target native
+          moon build --target wasm-gc
 
-      - name: Type check (deny warnings)
-        run: |
-          moon check --deny-warn
+      - name: Run all-target tests with warnings denied
+        shell: bash
+        run: moon test --deny-warn --target all
 
-      - name: Validate interface files
+      - name: Run native tests
+        shell: bash
+        run: moon test --deny-warn --target native
+
+      - name: Validate generated interfaces
+        shell: bash
         run: |
           moon info
-
-      - name: Run unit test suite
-        run: |
-          moon test
+          git diff --exit-code

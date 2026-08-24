@@ -38,3 +38,16 @@ test "differential evolution global search" {
   assert_true((best[0] - 3.5).abs() < 0.1)
   assert_true((best[1] - 7.2).abs() < 0.1)
 }
+
+///|
+test "differential evolution keeps bounded parameters" {
+  let objective = fn(p : Array[Double]) -> Double {
+    let x = p[0] - 0.25
+    x * x
+  }
+  let bounds = [ParameterBound::new("x", -0.5, 0.5, 0.0)]
+  let best = differential_evolution(objective, bounds, 2, 4, 0.8, 0.9)
+  assert_true(best.length() == 1)
+  assert_true(best[0] >= -0.5 && best[0] <= 0.5)
+  assert_true(!best[0].is_nan() && !best[0].is_inf())
+}

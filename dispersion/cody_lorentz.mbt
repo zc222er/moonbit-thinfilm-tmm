@@ -100,6 +100,6 @@ pub impl OpticalDispersion for CodyLorentzDispersion with fn get_permittivity(
   self,
   wavelength_nm,
 ) {
-  let n_c = self.get_complex_index(wavelength_nm)
+  let n_c = OpticalDispersion::get_complex_index(self, wavelength_nm)
   n_c.mul(n_c)
 }

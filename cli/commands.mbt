@@ -130,27 +130,44 @@ pub fn cmd_benchmark() -> String {
   let sio2 = @mat.fused_silica()
   let glass = @mat.bk7().to_layer(0.0, 600.0)
 
-  // 50 pairs = 100 thin film layers
-  let dbr = @dev.DBRDesign::new(600.0, 50, tio2, sio2, glass)
+  // Fixed workload: 24 pairs = 48 thin-film layers and 401 wavelengths.
+  let dbr = @dev.DBRDesign::new(600.0, 24, tio2, sio2, glass)
   let stack = dbr.build_stack()
 
-  // 1000 wavelength points
-  let grid = @core.SpectrumGrid::linear(400.0, 800.0, 1000)
+  let grid = @core.SpectrumGrid::linear(400.0, 800.0, 401)
   let sim = @tmm.solve_spectrum(stack, grid, @core.IncidentAngle::normal())
+
+  let uniaxial = @tmm4.PermittivityTensor::uniaxial(
+    @core.Complex::from_real(1.45),
+    @core.Complex::from_real(1.72),
+    0.55,
+    0.35,
+  )
+  let anisotropic = @tmm4.solve_berreman_4x4(
+    @core.Complex::from_real(1.0),
+    [(uniaxial, 220.0)],
+    @core.Complex::from_real(1.52),
+    550.0,
+    @core.IncidentAngle::from_deg(32.0),
+  )
+
+  let device_grid = @core.SpectrumGrid::solar_spectrum(121)
+  let device_stack = @dev.create_perovskite_solar_cell(380.0, 550.0)
+  let device_result = @dev.calculate_solar_cell_jsc(
+    device_stack, 2, device_grid,
+  )
 
   let sb = StringBuilder::new()
   sb.write_string("=== Pure MoonBit Optical Simulation Benchmark ===\n")
+  sb.write_string("benchmark_version=1\n")
   sb.write_string(
-    "1. 100-Layer DBR Transfer Matrix Multiplications: 1,000 Wavelength Points\n",
+    "case=2x2_dbr layers=48 wavelengths=401 reflectance_600nm=\{sim.reflectance.interpolate_linear(600.0)}\n",
   )
   sb.write_string(
-    "   Total 2x2 Matrix Products Computed: \{100 * 1000} matrix operations\n",
+    "case=4x4_uniaxial layers=1 wavelength=550nm result=\{anisotropic}\n",
   )
   sb.write_string(
-    "   Status: Completed successfully in Pure MoonBit (WASM/Native compatible)\n",
-  )
-  sb.write_string(
-    "   Reflectance @ 600nm: \{sim.reflectance.interpolate_linear(600.0) * 100.0}%\n",
+    "case=device_spectrum wavelengths=121 jsc_ma_cm2=\{device_result.short_circuit_current_ma_cm2} absorption=\{device_result.integrated_absorption_fraction}\n",
   )
 
   sb.to_string()

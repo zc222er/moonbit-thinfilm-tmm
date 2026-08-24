@@ -64,3 +64,21 @@ test "ellipsometry psi and delta at 70 degrees" {
   assert_true(ellip.psi_deg > 5.0 && ellip.psi_deg < 45.0)
   assert_true(ellip.delta_deg >= 0.0 && ellip.delta_deg <= 360.0)
 }
+
+///|
+test "absorbing film preserves energy balance" {
+  let air = @core.Layer::real("Air", 0.0, 1.0)
+  let film = @core.Layer::absorbing("LossyFilm", 180.0, 2.0, 0.08)
+  let glass = @core.Layer::real("Glass", 0.0, 1.5)
+  let stack = @core.MultiLayerStack::new(air, [film], glass)
+
+  let result = solve_tmm2d_single(
+    stack,
+    550.0,
+    @core.IncidentAngle::from_deg(35.0),
+  )
+  assert_true(result.a_power > 0.0)
+  assert_true(
+    (result.r_power + result.t_power + result.a_power - 1.0).abs() < 1.0e-8,
+  )
+}

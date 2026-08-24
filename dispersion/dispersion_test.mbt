@@ -53,3 +53,17 @@ test "tabulated dispersion interpolation" {
   assert_true(n_550.re < 3.5 && n_550.re > 3.3)
   assert_true(n_550.im < 0.05 && n_550.im > 0.01)
 }
+
+///|
+test "dispersion models stay finite at nonpositive wavelength" {
+  let cauchy = CauchyDispersion::transparent(1.45, 0.0035, 0.0)
+  let cauchy_zero = cauchy.get_complex_index(0.0)
+  let cauchy_negative = cauchy.get_complex_index(-10.0)
+  assert_true(!cauchy_zero.re.is_nan() && !cauchy_zero.re.is_inf())
+  assert_true(!cauchy_negative.re.is_nan() && !cauchy_negative.re.is_inf())
+
+  let drude = DrudeDispersion::new(4.0, 9.0, 0.05)
+  let eps_zero = drude.get_permittivity(0.0)
+  assert_true(!eps_zero.re.is_nan() && !eps_zero.re.is_inf())
+  assert_true(!eps_zero.im.is_nan() && !eps_zero.im.is_inf())
+}

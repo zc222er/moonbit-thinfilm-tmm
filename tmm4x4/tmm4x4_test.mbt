@@ -46,3 +46,18 @@ test "berreman 4x4 uniaxial birefringent layer" {
   assert_true(res_4x4.r_ss.norm_sq() >= 0.0)
   assert_true(res_4x4.r_pp.norm_sq() >= 0.0)
 }
+
+///|
+test "berreman empty stack is finite" {
+  let result = solve_berreman_4x4(
+    @core.Complex::from_real(1.0),
+    [],
+    @core.Complex::from_real(1.5),
+    550.0,
+    @core.IncidentAngle::from_deg(89.0),
+  )
+  assert_true(result.r_ss.abs() < 10.0)
+  assert_true(result.r_pp.abs() < 10.0)
+  assert_true(result.t_ss.abs() < 10.0)
+  assert_true(result.t_pp.abs() < 10.0)
+}

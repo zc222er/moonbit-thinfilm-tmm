@@ -100,8 +100,11 @@ pub fn SpectrumGrid::linear(
   stop_nm : Double,
   steps : Int,
 ) -> SpectrumGrid {
+  if steps <= 0 {
+    return { wavelengths: [] }
+  }
   let wavelengths = Array::new(capacity=steps)
-  if steps <= 1 {
+  if steps == 1 {
     wavelengths.push(start_nm)
   } else {
     let step = (stop_nm - start_nm) / (steps.to_double() - 1.0)

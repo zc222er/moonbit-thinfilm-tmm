@@ -119,3 +119,19 @@ test "spectrum grid and linear interpolation" {
   assert_eq(data.interpolate_linear(550.0), 15.0)
   assert_eq(data.interpolate_linear(700.0), 30.0)
 }
+
+///|
+test "zero-step spectrum grid is empty" {
+  let grid = SpectrumGrid::linear(400.0, 800.0, 0)
+  assert_eq(grid.count(), 0)
+
+  let data = SpectrumData::zeros("empty", grid)
+  assert_eq(data.grid.count(), 0)
+  assert_eq(data.interpolate_linear(550.0), 0.0)
+}
+
+///|
+test "negative-step spectrum grid is empty" {
+  let grid = SpectrumGrid::linear(400.0, 800.0, -3)
+  assert_eq(grid.count(), 0)
+}

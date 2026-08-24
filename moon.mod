@@ -2,7 +2,7 @@ name = "zc222er/thinfilm_tmm"
 
 version = "0.1.0"
 
-readme = "README.mbt.md"
+readme = "README.md"
 
 repository = "https://github.com/zc222er/moonbit-thinfilm-tmm"
 

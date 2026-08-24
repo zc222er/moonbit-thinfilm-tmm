@@ -1,5 +1,10 @@
 ///|
 fn main {
+  let args = @env.args()
+  if args.contains("benchmark") {
+    println(@cli.cmd_benchmark())
+    return
+  }
   println(
     "================================================================================",
   )

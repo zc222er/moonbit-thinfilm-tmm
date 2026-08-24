@@ -97,7 +97,7 @@ pub impl OpticalDispersion for CauchyDispersion with fn get_permittivity(
   self,
   wavelength_nm,
 ) {
-  let nc = self.get_complex_index(wavelength_nm)
+  let nc = OpticalDispersion::get_complex_index(self, wavelength_nm)
   nc.mul(nc)
 }
 
@@ -191,7 +191,7 @@ pub impl OpticalDispersion for Sellmeier3Dispersion with fn get_permittivity(
   self,
   wavelength_nm,
 ) {
-  let nc = self.get_complex_index(wavelength_nm)
+  let nc = OpticalDispersion::get_complex_index(self, wavelength_nm)
   nc.mul(nc)
 }
 
@@ -242,7 +242,7 @@ pub impl OpticalDispersion for DrudeDispersion with fn get_complex_index(
   self,
   wavelength_nm,
 ) {
-  let eps = self.get_permittivity(wavelength_nm)
+  let eps = OpticalDispersion::get_permittivity(self, wavelength_nm)
   eps.sqrt()
 }
 
@@ -304,7 +304,7 @@ pub impl OpticalDispersion for DrudeLorentzDispersion with fn get_permittivity(
     return @core.Complex::from_real(self.eps_inf)
   }
 
-  let mut eps = self.drude.get_permittivity(wavelength_nm)
+  let mut eps = OpticalDispersion::get_permittivity(self.drude, wavelength_nm)
 
   for osc in self.oscillators {
     // A_j / (E0^2 - E^2 - i * Gamma * E)
@@ -324,7 +324,7 @@ pub impl OpticalDispersion for DrudeLorentzDispersion with fn get_complex_index(
   self,
   wavelength_nm,
 ) {
-  let eps = self.get_permittivity(wavelength_nm)
+  let eps = OpticalDispersion::get_permittivity(self, wavelength_nm)
   eps.sqrt()
 }
 
@@ -425,7 +425,7 @@ pub impl OpticalDispersion for TaucLorentzDispersion with fn get_complex_index(
   self,
   wavelength_nm,
 ) {
-  let eps = self.get_permittivity(wavelength_nm)
+  let eps = OpticalDispersion::get_permittivity(self, wavelength_nm)
   eps.sqrt()
 }
 
@@ -560,6 +560,6 @@ pub impl OpticalDispersion for TabulatedDispersion with fn get_permittivity(
   self,
   wavelength_nm,
 ) {
-  let nc = self.get_complex_index(wavelength_nm)
+  let nc = OpticalDispersion::get_complex_index(self, wavelength_nm)
   nc.mul(nc)
 }
