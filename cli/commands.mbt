@@ -10,7 +10,7 @@ pub fn cmd_simulate() -> String {
   let grid = @core.SpectrumGrid::visible_spectrum(61)
   let sim = @tmm.solve_spectrum(stack, grid, @core.IncidentAngle::normal())
 
-  let sb = StringBuilder::new()
+  let sb = StringBuilder()
   sb.write_string(
     "=== MultiLayer Optical Simulation (Glass / TiO2 55nm / SiO2 90nm / Air) ===\n\n",
   )
@@ -47,7 +47,7 @@ pub fn cmd_dbr(pairs : Int, center_wl : Double) -> String {
   let stopband_w = dbr.analytical_stopband_width()
   let peak_r = dbr.analytical_peak_reflectance()
 
-  let sb = StringBuilder::new()
+  let sb = StringBuilder()
   sb.write_string("=== Distributed Bragg Reflector (DBR) Simulation ===\n")
   sb.write_string("Center Wavelength: \{center_wl} nm, Pairs: \{pairs}\n")
   sb.write_string("Materials: TiO2 (n=2.48) / SiO2 (n=1.46)\n")
@@ -65,7 +65,7 @@ pub fn cmd_solar() -> String {
   let solar_stack = @dev.create_perovskite_solar_cell(380.0, 550.0)
   let res = @dev.calculate_solar_cell_jsc(solar_stack, 2, grid)
 
-  let sb = StringBuilder::new()
+  let sb = StringBuilder()
   sb.write_string("=== Perovskite Solar Cell Optical Simulation (AM1.5G) ===\n")
   sb.write_string(
     "Stack: Glass / ITO 120nm / PEDOT:PSS 30nm / MAPbI3 380nm / Ag 100nm\n",
@@ -90,7 +90,7 @@ pub fn cmd_materials() -> String {
   let db = @mat.MaterialDatabase::standard()
   let all_mats = db.all()
 
-  let sb = StringBuilder::new()
+  let sb = StringBuilder()
   sb.write_string(
     "=== Optical Materials Database (\{all_mats.length()} materials) ===\n",
   )
@@ -157,7 +157,7 @@ pub fn cmd_benchmark() -> String {
     device_stack, 2, device_grid,
   )
 
-  let sb = StringBuilder::new()
+  let sb = StringBuilder()
   sb.write_string("=== Pure MoonBit Optical Simulation Benchmark ===\n")
   sb.write_string("benchmark_version=1\n")
   sb.write_string(

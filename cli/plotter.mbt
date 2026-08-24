@@ -34,7 +34,7 @@ pub fn render_ascii_spectrum(
     max_val = min_val + 1.0
   }
 
-  let sb = StringBuilder::new()
+  let sb = StringBuilder()
   sb.write_string("==== Spectrum Plot: \{spectrum.name} ====\n")
 
   // Create canvas (h rows x w cols)
