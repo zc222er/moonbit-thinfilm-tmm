@@ -72,6 +72,8 @@ wasm/        WebAssembly-facing exports
 
 Each directory with a `moon.pkg` file is a separate package. The implementation is intentionally split by numerical responsibility so that solver and application code can be reused independently.
 
+Material-table scope and attribution boundaries are documented in [Data provenance](docs/MATERIALS.md).
+
 ## Benchmark
 
 The benchmark is a fixed functional workload, not a synthetic loop counter. It executes:
@@ -90,7 +92,7 @@ On the local Windows PowerShell environment used for this validation (`moon 0.1.
 
 | workload | points/layers | min (ms) | median (ms) | max (ms) |
 | --- | ---: | ---: | ---: | ---: |
-| complete benchmark command | 121/401-point workload, including all three cases | 335.712 | 415.203 | 499.055 |
+| complete benchmark command | 121/401-point workload, including all three cases | 225.675 | 235.992 | 282.394 |
 
 These timings include the native `moon run` process and are environment-dependent. They are provided for reproducibility, not as a portable performance guarantee. To collect new samples:
 
@@ -102,7 +104,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\benchmark.ps1 -Iterations 5
 
 The test suite covers core numerical operations, physical reference cases, dispersion behavior, multilayer solvers, anisotropic calculations, device presets, CLI output, and bounded optimization. It also includes boundary cases for empty/negative-size grids, extrapolation-safe spectrum access, absorbing-film energy balance, grazing-angle 4×4 execution, nonpositive wavelengths, and optimizer bounds.
 
-The current local validation runs 114 tests successfully on the wasm, wasm-gc, js, and native targets. Reproduce the strict suite with:
+The current local validation runs 115 tests successfully on the wasm, wasm-gc, js, and native targets. Reproduce the strict suite with:
 
 ```bash
 moon test --deny-warn --target all
