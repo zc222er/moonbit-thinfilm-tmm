@@ -146,6 +146,31 @@ pub fn calculate_anisotropic_layer_matrix(
 }
 
 ///|
+fn multiply_matrix_vector(
+  matrix : @core.Mat4x4C,
+  vector : Array[@core.Complex],
+) -> Array[@core.Complex] {
+  let result = Array::new(capacity=4)
+  for i = 0; i < 4; i = i + 1 {
+    let mut value = @core.Complex::zero()
+    for j = 0; j < 4; j = j + 1 {
+      value = value.add(matrix.get(i, j).mul(vector[j]))
+    }
+    result.push(value)
+  }
+  result
+}
+
+///|
+fn negate_vector(vector : Array[@core.Complex]) -> Array[@core.Complex] {
+  let result = Array::new(capacity=4)
+  for value in vector {
+    result.push(value.neg())
+  }
+  result
+}
+
+///|
 /// Full 4x4 2x2 Jones Reflection and Transmission Matrix result
 pub struct JonesMatrixResult {
   r_ss : @core.Complex
@@ -181,17 +206,17 @@ pub fn solve_berreman_4x4(
   let n_amb = ambient_n.re
   let kx = n_amb * @math.sin(theta_rad)
 
-  // 1. Calculate overall transfer matrix M = prod_j P_j
+  // 1. Calculate the left-to-right transfer matrix M = P_N ... P_2 P_1.
   let mut m_total = @core.Mat4x4C::identity()
   for item in layer_tensors {
     let (eps, d_nm) = item
     if d_nm > 0.0 {
       let p_j = calculate_anisotropic_layer_matrix(eps, d_nm, kx, k0)
-      m_total = m_total.mul(p_j)
+      m_total = p_j.mul(m_total)
     }
   }
 
-  // 2. Ambient and Substrate partial wave matrices
+  // 2. Ambient and substrate forward/backward wave bases.
   // Ambient: kz_amb = sqrt(n_amb^2 - kx^2)
   let kz_amb = ambient_n
     .mul(ambient_n)
@@ -202,80 +227,74 @@ pub fn solve_berreman_4x4(
     .mul(substrate_n)
     .sub(@core.Complex::from_real(kx * kx))
     .sqrt()
-  let q_sub = kz_sub.div(substrate_n)
+  let q_sub = kz_sub.div(substrate_n) // cos(theta_sub)
 
-  // Semi-analytical matching for Jones coefficients:
-  // For normal / oblique incidence, solve linear system:
-  // [E_inc + r_s, r_p / q_0, ...] = M * [t_s, t_p / q_sub, ...]
-  let m00 = m_total.get(0, 0)
-  let m01 = m_total.get(0, 1)
-  let m02 = m_total.get(0, 2)
-  let m03 = m_total.get(0, 3)
+  // The Berreman state is [Ex, Hy, Ey, -Hx]. In this basis the s-wave
+  // admittance is kz and the p-wave admittance is n / q = eps / kz.
+  let y_s_amb = kz_amb
+  let y_s_sub = kz_sub
+  let y_p_amb = ambient_n.div(q_amb)
+  let y_p_sub = substrate_n.div(q_sub)
+  let reflected_s = [
+    @core.Complex::zero(),
+    @core.Complex::zero(),
+    @core.Complex::one(),
+    y_s_amb.neg(),
+  ]
+  let reflected_p = [
+    @core.Complex::one(),
+    y_p_amb.neg(),
+    @core.Complex::zero(),
+    @core.Complex::zero(),
+  ]
+  let incident_s = [
+    @core.Complex::zero(),
+    @core.Complex::zero(),
+    @core.Complex::one(),
+    y_s_amb,
+  ]
+  let incident_p = [
+    @core.Complex::one(),
+    y_p_amb,
+    @core.Complex::zero(),
+    @core.Complex::zero(),
+  ]
+  let transmitted_s = [
+    @core.Complex::zero(),
+    @core.Complex::zero(),
+    @core.Complex::one(),
+    y_s_sub,
+  ]
+  let transmitted_p = [
+    @core.Complex::one(),
+    y_p_sub,
+    @core.Complex::zero(),
+    @core.Complex::zero(),
+  ]
 
-  let m10 = m_total.get(1, 0)
-  let m11 = m_total.get(1, 1)
-  let m12 = m_total.get(1, 2)
-  let m13 = m_total.get(1, 3)
-
-  let m20 = m_total.get(2, 0)
-  let m21 = m_total.get(2, 1)
-  let m22 = m_total.get(2, 2)
-  let m23 = m_total.get(2, 3)
-
-  let m30 = m_total.get(3, 0)
-  let m31 = m_total.get(3, 1)
-  let m32 = m_total.get(3, 2)
-  let m33 = m_total.get(3, 3)
-
-  // Form 4x4 matrix equation A * [r_s, r_p, t_s, t_p]^T = B
+  // M * (incident + reflected) = transmitted.
+  // Form A * [r_s, r_p, t_s, t_p]^T = b for each incident polarization.
+  let reflected_s_column = multiply_matrix_vector(m_total, reflected_s)
+  let reflected_p_column = multiply_matrix_vector(m_total, reflected_p)
+  let transmitted_s_column = negate_vector(transmitted_s)
+  let transmitted_p_column = negate_vector(transmitted_p)
   let a_mat = @linalg.MatrixC::zeros(4, 4)
-
-  // Row 0: Ex matching: -r_p * q_amb - M00 * q_sub * t_p - M01 * substrate_n * t_p - M02 * t_s - M03 * kz_sub * t_s
-  a_mat.set(0, 0, @core.Complex::zero())
-  a_mat.set(0, 1, q_amb.neg())
-  a_mat.set(0, 2, m02.add(m03.mul(kz_sub)).neg())
-  a_mat.set(0, 3, m00.mul(q_sub).add(m01.mul(substrate_n)).neg())
-
-  // Row 1: Hy matching: -ambient_n * r_p - M10 * q_sub * t_p - M11 * substrate_n * t_p - M12 * t_s - M13 * kz_sub * t_s
-  a_mat.set(1, 0, @core.Complex::zero())
-  a_mat.set(1, 1, ambient_n.neg())
-  a_mat.set(1, 2, m12.add(m13.mul(kz_sub)).neg())
-  a_mat.set(1, 3, m10.mul(q_sub).add(m11.mul(substrate_n)).neg())
-
-  // Row 2: Ey matching: -r_s - M20 * q_sub * t_p - M21 * substrate_n * t_p - M22 * t_s - M23 * kz_sub * t_s
-  a_mat.set(2, 0, @core.Complex::from_real(-1.0))
-  a_mat.set(2, 1, @core.Complex::zero())
-  a_mat.set(2, 2, m22.add(m23.mul(kz_sub)).neg())
-  a_mat.set(2, 3, m20.mul(q_sub).add(m21.mul(substrate_n)).neg())
-
-  // Row 3: -Hx matching: kz_amb * r_s - M30 * q_sub * t_p - M31 * substrate_n * t_p - M32 * t_s - M33 * kz_sub * t_s
-  a_mat.set(3, 0, kz_amb)
-  a_mat.set(3, 1, @core.Complex::zero())
-  a_mat.set(3, 2, m32.add(m33.mul(kz_sub)).neg())
-  a_mat.set(3, 3, m30.mul(q_sub).add(m31.mul(substrate_n)).neg())
-
+  for row = 0; row < 4; row = row + 1 {
+    a_mat.set(row, 0, reflected_s_column[row])
+    a_mat.set(row, 1, reflected_p_column[row])
+    a_mat.set(row, 2, transmitted_s_column[row])
+    a_mat.set(row, 3, transmitted_p_column[row])
+  }
   let lu_a = a_mat.lu_decompose()
 
-  // Incident s-polarization: B_s = [0, 0, -1, -kz_amb]^T
-  let b_s = [
-    @core.Complex::zero(),
-    @core.Complex::zero(),
-    @core.Complex::from_real(-1.0),
-    kz_amb.neg(),
-  ]
+  let b_s = negate_vector(multiply_matrix_vector(m_total, incident_s))
   let sol_s = lu_a.solve(b_s)
   let r_ss = sol_s[0]
   let r_sp = sol_s[1]
   let t_ss = sol_s[2]
   let t_sp = sol_s[3]
 
-  // Incident p-polarization: B_p = [-q_amb, ambient_n, 0, 0]^T
-  let b_p = [
-    q_amb.neg(),
-    ambient_n,
-    @core.Complex::zero(),
-    @core.Complex::zero(),
-  ]
+  let b_p = negate_vector(multiply_matrix_vector(m_total, incident_p))
   let sol_p = lu_a.solve(b_p)
   let r_ps = sol_p[0]
   let r_pp = sol_p[1]

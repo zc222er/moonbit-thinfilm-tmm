@@ -18,6 +18,11 @@ test "berreman 4x4 isotropic degeneracy check" {
   assert_true(res_4x4.r_sp.abs() < 1.0e-10)
   assert_true(res_4x4.r_ps.abs() < 1.0e-10)
   assert_true(res_4x4.r_ss.abs() > 0.0)
+  assert_true((res_4x4.r_ss.norm_sq() - res_4x4.r_pp.norm_sq()).abs() < 1.0e-10)
+  assert_true((res_4x4.t_ss.norm_sq() - res_4x4.t_pp.norm_sq()).abs() < 1.0e-10)
+  assert_true(
+    (res_4x4.r_ss.norm_sq() + 1.5 * res_4x4.t_ss.norm_sq() - 1.0).abs() < 1.0e-8,
+  )
 }
 
 ///|
@@ -60,4 +65,23 @@ test "berreman empty stack is finite" {
   assert_true(result.r_pp.abs() < 10.0)
   assert_true(result.t_ss.abs() < 10.0)
   assert_true(result.t_pp.abs() < 10.0)
+}
+
+///|
+test "berreman empty stack matches normal incidence fresnel coefficients" {
+  let result = solve_berreman_4x4(
+    @core.Complex::from_real(1.0),
+    [],
+    @core.Complex::from_real(1.5),
+    550.0,
+    @core.IncidentAngle::normal(),
+  )
+  let expected_r = @core.Complex::from_real(-0.2)
+  let expected_t = @core.Complex::from_real(0.8)
+  assert_true(result.r_ss.approx_eq(expected_r, 1.0e-10))
+  assert_true(result.r_pp.approx_eq(expected_r, 1.0e-10))
+  assert_true(result.t_ss.approx_eq(expected_t, 1.0e-10))
+  assert_true(result.t_pp.approx_eq(expected_t, 1.0e-10))
+  assert_true(result.r_sp.abs() < 1.0e-10)
+  assert_true(result.r_ps.abs() < 1.0e-10)
 }
